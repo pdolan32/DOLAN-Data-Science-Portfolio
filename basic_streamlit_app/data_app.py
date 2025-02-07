@@ -23,5 +23,6 @@ filtered_df = df[df["City"] == city]
 st.write(f"People in {city}:")
 st.dataframe(filtered_df)
 
-df2 = pd.read_csv("data/sample_data.csv")
+df2 = pd.read_csv("basic_streamlit_app/data/sample_data.csv")
+st.write("Here's the dataset loaded from a CSV file:")
 st.dataframe(df2)
