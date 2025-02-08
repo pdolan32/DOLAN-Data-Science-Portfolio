@@ -32,3 +32,4 @@ song = st.selectbox("Select a song", df["Song Title"].unique())
 filtered_df = df[df["Song Title"] == song]
 st.write(f"Streaming Data for {song}:")
 st.dataframe(filtered_df)
+# To open the app, run the following: streamlit run basic_streamlit_app/spotify_streams_app.py
