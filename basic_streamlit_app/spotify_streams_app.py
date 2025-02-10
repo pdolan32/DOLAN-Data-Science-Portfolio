@@ -26,9 +26,10 @@ if st.button("Toggle Total Streams"):
 else:
     columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']
 
+# This code creates a dataframe with particular columns
 stream_data = df[columns_to_show]
 
-# This code displays the dataframe
+# This code displays the dataframe created above
 st.dataframe(stream_data)
 
 st.write("The below dropdown menu allows you to isolate the streaming data for a particular song in the top ten.")
