@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 # This code reads in my data csv file and creates a dataframe with the imported data
-df = pd.read_csv("basic_streamlit_app/data/spotify_data.csv")
+df = pd.read_csv("data/spotify_data.csv")
 df.index = range(1, len(df) + 1)
 
 # This code defaults the dataframe to display daily streams
