@@ -25,7 +25,7 @@ Ensure you have the following installed:
 ### Installation
 1. Clone this repository:
 ```bash
-git clone https://github.com/pdolan32/basic_streamlit_app.git
+git clone https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/basic_streamlit_app.git
 ```
 2. Navigate to the project directories:
 ```bash
