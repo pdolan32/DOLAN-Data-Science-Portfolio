@@ -1,5 +1,48 @@
-### The Spotify Streams App is a basic streamlit app which showcases the top ten most-streamed songs on Spotify for February 6th, 2025. 
+# Spotify Streams App 🎸🥁🎶
 
-The displayed dataframe consists of information including each song's title, the names of the main and featured artists (if applicable), and each song's daily streams and total streams. The app has interactivity widgets to customize the data display: for instance, by using the buttons, the user can toggle between displaying each song's daily stream count or total stream count. Furthermore, there is a drop-down menu where the user can select an individual song to display the data for.
+## Overview
+The **Spotify Streams App** is a simple Streamlit application that displays the top ten most-streamed songs on Spotify for February 6th, 2025. The app provides an interactive way to explore streaming data, allowing users to view key details about each song and customize their display preferences.
 
-To open the app, run the following command in the VSCode Terminal: streamlit run basic_streamlit_app/spotify_streams_app.py
+## Features
+- **Data Display**: A dataframe showcasing the top ten most-streamed songs, including:
+  - Song title
+  - Main artist(s)
+  - Featured artist(s) (if applicable)
+  - Daily stream count
+  - Total stream count
+- **Interactivity**:
+  - Toggle between displaying daily stream count and total stream count using buttons.
+  - Select a specific song from a drop-down menu to view its details.
+
+
+## Installation & Setup
+### Prerequisites
+Ensure you have the following installed:
+- Python (3.12.7 recommended)
+- pip (Python package manager)
+- Streamlit (if not installed, see below)
+
+### Installation
+1. Clone this repository:
+```bash
+git clone https://github.com/pdolan32/basic_streamlit_app.git
+```
+2. Navigate to the project directories:
+```bash
+cd basic_streamlit_app
+```
+3. Installing Streamlit: to install Streamlit manually, use the following command in your terminal:
+
+```bash
+pip install streamlit
+```
+
+## Running the App
+To launch the application, use the following command in your terminal:
+
+```bash
+streamlit run basic_streamlit_app/spotify_streams_app.py
+```
+
+The app should open automatically in your default web browser.
+
