@@ -9,22 +9,21 @@ df.index = range(1, len(df) + 1)
 # This code defaults the dataframe to display daily streams
 columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']  
 
-st.title("The Most Streamed Spotify Songs for 2/6/25")
+st.title("The Most Streamed Spotify Songs for 2/6/25 🎶")
 
 st.subheader("This app showcases the top ten most-streamed songs on Spotify for February 6th, 2025.")
 st.write("The below dataframe displays the songs' titles, the leading and featured artists, as well as the songs' daily streams. To see the songs' total streams, click the 'Toggle Total Streams Button.")
 
-# This code creates a button that switches the dataframe from displaying a song's daily streams to it's total streams
-if st.button("Toggle Daily Streams"):
-    columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']
-else:
-    columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Total Streams']
+# Create a container for the buttons to group them together
+with st.container():
+    col1, col2 = st.columns([1, 3])  # You can keep the widths equal
+    with col1:
+        if st.button("Toggle Daily Streams"):
+            columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']
+    with col2:
+        if st.button("Toggle Total Streams"):
+            columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Total Streams']
 
-# This code creates a button that switches the dataframe from displaying a song's total streams to it's daily streams
-if st.button("Toggle Total Streams"):
-    columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Total Streams']
-else:
-    columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']
 
 # This code creates a dataframe with particular columns
 stream_data = df[columns_to_show]
