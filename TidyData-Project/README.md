@@ -32,11 +32,11 @@ Ensure you have the following installed/downloaded:
     ```
 2. **Download the Jupyter Notebook**:
 
-   From the TidyData-Project repository folder, download the Jupyter Notebook file titled ___. Once this notebook is           downloaded, upload this notebook to your personal Jupyter Notebook from the homepage.
+    From the TidyData-Project repository folder, download the Jupyter Notebook file titled DOLAN_TidyData-Project.ipynb.        Once this notebook is downloaded, upload this notebook to your personal Jupyter Notebook from the homepage.
 
 3. **Open the Jupyter Notebook**:
 
-   In your Jupyter Notebook homepage, navigate to the ___ file and open it.
+   In your Jupyter Notebook homepage, navigate to the DOLAN_TidyData-Project.ipynb file and open it.
 
 4. **Run the Code**:
 
