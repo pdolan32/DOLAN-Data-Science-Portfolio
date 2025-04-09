@@ -14,9 +14,9 @@ st.title("The Most Streamed Spotify Songs for 2/6/25 🎶")
 st.subheader("This app showcases the top ten most-streamed songs on Spotify for February 6th, 2025.")
 st.write("The below dataframe displays the songs' titles, the leading and featured artists, as well as the songs' daily streams. To see the songs' total streams, click the 'Toggle Total Streams Button.")
 
-# Create a container for the buttons to group them together
+# This code creates a container for the buttons to group them together
 with st.container():
-    col1, col2 = st.columns([1, 3])  # You can keep the widths equal
+    col1, col2 = st.columns([1, 3])  
     with col1:
         if st.button("Toggle Daily Streams"):
             columns_to_show = ['Song Title', 'Lead Artist', 'Featured Artist(s)', 'Daily Streams']
