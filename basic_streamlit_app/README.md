@@ -23,19 +23,18 @@ Ensure you have the following installed:
 - Streamlit (if not installed, see below)
 
 ### Installation
-1. Clone this repository:
-```bash
-git clone https://github.com/pdolan32/basic_streamlit_app.git
-```
-2. Navigate to the project directories:
-```bash
-cd basic_streamlit_app
-```
-3. Installing Streamlit: to install Streamlit manually, use the following command in your terminal:
 
-```bash
-pip install streamlit
-```
+1. **Install Dependencies**:
+
+    Make sure you have Python 3.12.7 installed, then run:
+
+    ```bash
+    pip install streamlit pandas
+    ```
+
+2. **Get the Data**:  
+    Download the `spotify_data.csv` dataset from my data folder and place it in the `data` folder within your project directory.
+
 
 ## Running the App
 To launch the application, use the following command in your terminal:
