@@ -4,8 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score, accuracy_score, confusion_matrix, classification_report
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.datasets import fetch_california_housing
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import fetch_california_housing, load_breast_cancer, load_diabetes, load_iris
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
@@ -29,7 +28,7 @@ if option == 'Upload Your Own':
 # Use Sample Dataset
 else:
     # Sidebar for dataset selection
-    dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('California Housing', 'Breast Cancer'))
+    dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('California Housing', 'Breast Cancer', 'Diabetes', 'Iris'))
 
     if dataset_option == 'California Housing':
         # Load California Housing dataset
@@ -43,10 +42,23 @@ else:
         # Load Breast Cancer dataset
         cancer = load_breast_cancer()
         df = pd.DataFrame(data=cancer.data, columns=cancer.feature_names)
-
         df['malignant'] = cancer.target
         st.write("Sample Dataset: Breast Cancer")
         st.write(df.head())
+
+    elif dataset_option == 'Diabetes':
+        diabetes = load_diabetes()
+        df = pd.DataFrame(data=diabetes.data, columns=diabetes.feature_names)
+        df['disease_progression'] = diabetes.target
+        st.write("Sample Dataset: Diabetes")
+        st.write(df.head())
+
+    elif dataset_option == 'Iris':
+        iris = load_iris()
+        df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+        df['species'] = iris.target
+        st.write("Sample Dataset: Iris")
+        st.write(df)
 
 model_option = st.sidebar.selectbox('Choose a Supervised Machine Learning Model', ('None', 'Linear Regression', 'Logistic Regression'))
 
@@ -109,15 +121,22 @@ if model_option == 'Logistic Regression':
         # Prepare data for model
         X = df[features]
         y = df[target]
+
+        # Scale the data
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+
+        # Convert scaled data back into DataFrame and retain original feature names
+        X_scaled = pd.DataFrame(X_scaled, columns=features)
         
-        # Split the data
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
+        # Split the scaled data
+        X_train_scaled, X_test_scaled, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
         # Initialize and train the logistic regression model
         model = LogisticRegression()
-        model.fit(X_train, y_train)
+        model.fit(X_train_scaled, y_train)
         # Make predictions on the test set
-        y_pred = model.predict(X_test)
+        y_pred = model.predict(X_test_scaled)
         
         # Calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
