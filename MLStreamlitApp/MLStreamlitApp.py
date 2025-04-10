@@ -4,7 +4,7 @@ import numpy as np
 import graphviz
 from sklearn import tree
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score, accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import mean_squared_error, root_mean_squared_error, r2_score, accuracy_score, confusion_matrix, classification_report, roc_curve, roc_auc_score
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import fetch_california_housing, load_breast_cancer, load_diabetes, load_iris
@@ -14,6 +14,8 @@ from sklearn.preprocessing import StandardScaler
 
 # Title of the app
 st.title('Machine Learning Dataset Analysis')
+
+st.write('To begin, either upload a dataset or choose a sample dataset from the dropdown menu.')
 
 # Sidebar for user input
 option = st.sidebar.selectbox('Choose Dataset Option', ('Upload Your Own', 'Use Sample Dataset'))
@@ -35,14 +37,19 @@ else:
 
     if dataset_option == 'California Housing':
         # Load California Housing dataset
+        st.write('This is the California Housing dataset.')
         housing = fetch_california_housing()
         df = pd.DataFrame(data=housing.data, columns=housing.feature_names)
         df['MedHouseValue'] = housing.target
         st.write("Sample Dataset: California Housing")
         st.write(df.head())
+        st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
+        ' This dataset works best with regression models (like Linear Regression).')
 
     elif dataset_option == 'Breast Cancer':
         # Load Breast Cancer dataset
+        st.write('This is the Breast Cancer dataset.' \
+        ' This dataset works best with classification models')
         cancer = load_breast_cancer()
         df = pd.DataFrame(data=cancer.data, columns=cancer.feature_names)
         df['malignant'] = cancer.target
@@ -50,6 +57,8 @@ else:
         st.write(df.head())
 
     elif dataset_option == 'Diabetes':
+        st.write('This is the Diabetes dataset.' \
+        ' This dataset works best with regression models')
         diabetes = load_diabetes()
         df = pd.DataFrame(data=diabetes.data, columns=diabetes.feature_names)
         df['disease_progression'] = diabetes.target
@@ -57,6 +66,8 @@ else:
         st.write(df.head())
 
     elif dataset_option == 'Iris':
+        st.write('This is the Iris dataset.' \
+        ' This dataset works best with classification models')
         iris = load_iris()
         df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
         df['species'] = iris.target
@@ -163,12 +174,17 @@ if model_option == 'Logistic Regression':
 if model_option == 'Decision Tree':
 
     # Select Features and Target
-    st.sidebar.subheader('Select Features and Target for Logistic Regression')
+    st.sidebar.subheader('Select Features and Target for Decision Tree')
     test_size = st.sidebar.slider('Test Size for Train-Test Split', min_value=0.1, max_value=0.9, step=0.05, value=0.2)
     target = st.sidebar.selectbox('Choose Target Variable', df.columns)
     available_features = [col for col in df.columns if col != target]
     features = st.sidebar.multiselect('Choose Features', available_features)
-    
+
+    # NEW: Tree hyperparameter sliders
+    max_depth = st.sidebar.slider('Max Depth of Decision Tree', min_value=1, max_value=20, value=3)
+    min_samples_split = st.sidebar.slider('Min Samples Split', min_value=2, max_value=20, value=2)
+    min_samples_leaf = st.sidebar.slider('Min Samples Leaf', min_value=1, max_value=20, value=1)
+
     if target and features:
         # Prepare data for model
         X = df[features]
@@ -177,23 +193,22 @@ if model_option == 'Decision Tree':
         # Scale the data
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
-
-        # Convert scaled data back into DataFrame and retain original feature names
         X_scaled = pd.DataFrame(X_scaled, columns=features)
 
         X_train_scaled, X_test_scaled, y_train, y_test = train_test_split(X_scaled, y, test_size=test_size, random_state=42)
 
-        model = DecisionTreeClassifier() # change default parameters
+        # NEW: Initialize with custom hyperparameters
+        model = DecisionTreeClassifier(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf
+        )
         model.fit(X_train_scaled, y_train)
 
-        # Predict on test data
         y_pred = model.predict(X_test_scaled)
-
-        # Calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
         st.write(f"Accuracy: {accuracy:.2f}")
 
-        # Generate confusion matrix
         cm = confusion_matrix(y_test, y_pred)
         st.write("Confusion Matrix:")
         fig, ax = plt.subplots(figsize=(6, 6))
@@ -203,15 +218,16 @@ if model_option == 'Decision Tree':
         ax.set_ylabel('Actual')
         st.pyplot(fig)
 
-        # Display classification report
-        report = classification_report(y_test, y_pred)
-        st.markdown("### Classification Report")
-        st.markdown(f'```\n{report}\n```')
+        # Dynamic class names
+        class_names = [str(cls) for cls in np.unique(y_train)]
 
-        dot_data = tree.export_graphviz(model, feature_names=X_train_scaled.columns,
-                                class_names=["Flower1", "Flower2," "Flower3"],
-                                filled=True)
-
-        # Generate and display the decision tree graph
-        graph = graphviz.Source(dot_data)
-        graph
+        # Graphviz chart
+        dot_data = tree.export_graphviz(
+            model,
+            feature_names=X_train_scaled.columns,
+            class_names=class_names,
+            filled=True,
+            rounded=True,
+            special_characters=True
+        )
+        st.graphviz_chart(dot_data)
