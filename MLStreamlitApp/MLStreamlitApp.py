@@ -37,7 +37,9 @@ else:
 
     if dataset_option == 'California Housing':
         # Load California Housing dataset
-        st.write('This is the California Housing dataset.')
+        st.write('This is the California Housing dataset.' \
+        ' The California Housing Dataset is a popular dataset often used for regression tasks in machine learning.' \
+        ' It contains data collected from the 1990 California census and is used to predict median house value in different districts based on various features.')
         housing = fetch_california_housing()
         df = pd.DataFrame(data=housing.data, columns=housing.feature_names)
         df['MedHouseValue'] = housing.target
@@ -49,30 +51,39 @@ else:
     elif dataset_option == 'Breast Cancer':
         # Load Breast Cancer dataset
         st.write('This is the Breast Cancer dataset.' \
-        ' This dataset works best with classification models')
+        ' This dataset is a well-known dataset used for binary classification, often to test models that distinguish between benign and malignant tumors: The target value is the diagnosis, with 0 = malignant and 1 = benign.')
         cancer = load_breast_cancer()
         df = pd.DataFrame(data=cancer.data, columns=cancer.feature_names)
-        df['malignant'] = cancer.target
+        df['diagnosis'] = cancer.target
         st.write("Sample Dataset: Breast Cancer")
         st.write(df.head())
+        st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
+        ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
 
     elif dataset_option == 'Diabetes':
         st.write('This is the Diabetes dataset.' \
-        ' This dataset works best with regression models')
+        ' The Diabetes dataset is another classic dataset, mostly used for regression tasks. It comes from a medical study and is commonly used to predict disease progression based on health indicators. ' \
+        ' The goal is to predict a quantitative measure of disease progression one year after baseline (e.g., how much worse or better their diabetes got).')
         diabetes = load_diabetes()
         df = pd.DataFrame(data=diabetes.data, columns=diabetes.feature_names)
         df['disease_progression'] = diabetes.target
         st.write("Sample Dataset: Diabetes")
         st.write(df.head())
+        st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
+        ' This dataset works best with regression models (like Linear Regression).')
 
     elif dataset_option == 'Iris':
         st.write('This is the Iris dataset.' \
-        ' This dataset works best with classification models')
+        ' The Iris dataset contains information about 150 iris flowers from 3 different species.' \
+        ' Each sample represents one flower, and the goal is to classify the species of the flower based on 4 features.' \
+        ' The species of the Iris flower is categorical (0, 1, 2): Iris setosa, Iris versicolor, Iris virginica, respectively.')
         iris = load_iris()
         df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
         df['species'] = iris.target
         st.write("Sample Dataset: Iris")
         st.write(df.head())
+        st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
+        ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
 
 model_option = st.sidebar.selectbox('Choose a Supervised Machine Learning Model', ('None', 'Linear Regression', 'Logistic Regression', 'Decision Tree'))
 
