@@ -182,6 +182,25 @@ if model_option == 'Logistic Regression':
         st.markdown("### Classification Report")
         st.markdown(f'```\n{report}\n```')
 
+        # Get the predicted probabilities for the positive class (survival)
+        y_probs = model.predict_proba(X_test_scaled)[:, 1]
+
+        # Calculate the False Positive Rate (FPR), True Positive Rate (TPR), and thresholds
+        fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+
+        # Compute the Area Under the Curve (AUC) score
+        roc_auc = roc_auc_score(y_test, y_probs)
+        st.write(f"ROC AUC Score: {roc_auc:.2f}")
+
+        fig_roc, ax_roc = plt.subplots(figsize=(8, 6))
+        ax_roc.plot(fpr, tpr, lw=2, label=f'ROC Curve (AUC = {roc_auc:.2f})')
+        ax_roc.plot([0, 1], [0, 1], lw=2, linestyle='--', label='Random Guess')
+        ax_roc.set_xlabel('False Positive Rate')
+        ax_roc.set_ylabel('True Positive Rate')
+        ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
+        ax_roc.legend(loc="lower right")
+        st.pyplot(fig_roc)
+
 if model_option == 'Decision Tree':
 
     # Select Features and Target
@@ -229,6 +248,11 @@ if model_option == 'Decision Tree':
         ax.set_ylabel('Actual')
         st.pyplot(fig)
 
+        # Display classification report
+        report = classification_report(y_test, y_pred)
+        st.markdown("### Classification Report")
+        st.markdown(f'```\n{report}\n```')
+
         # Dynamic class names
         class_names = [str(cls) for cls in np.unique(y_train)]
 
@@ -242,3 +266,31 @@ if model_option == 'Decision Tree':
             special_characters=True
         )
         st.graphviz_chart(dot_data)
+
+       # Check number of unique classes in target
+        unique_classes = y_test.nunique()
+
+        if unique_classes == 2:
+            # Binary classification → show ROC curve
+            try:
+                y_probs = model.predict_proba(X_test_scaled)[:, 1]
+                fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+                roc_auc = roc_auc_score(y_test, y_probs)
+                st.write(f"ROC AUC Score: {roc_auc:.2f}")
+
+                # Plot ROC Curve
+                fig_roc, ax_roc = plt.subplots(figsize=(8, 6))
+                ax_roc.plot(fpr, tpr, lw=2, label=f'ROC Curve (AUC = {roc_auc:.2f})')
+                ax_roc.plot([0, 1], [0, 1], lw=2, linestyle='--', label='Random Guess')
+                ax_roc.set_xlabel('False Positive Rate')
+                ax_roc.set_ylabel('True Positive Rate')
+                ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
+                ax_roc.legend(loc="lower right")
+                st.pyplot(fig_roc)
+
+            except Exception as e:
+                st.error(f"Error computing ROC curve: {e}")
+        else:
+            # Multiclass → show message
+            st.write("ROC curve is only available for binary classification problems.")
+
