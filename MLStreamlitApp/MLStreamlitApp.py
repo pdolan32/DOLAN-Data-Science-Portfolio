@@ -43,7 +43,7 @@ else:
         housing = fetch_california_housing()
         df = pd.DataFrame(data=housing.data, columns=housing.feature_names)
         df['MedHouseValue'] = housing.target
-        st.write("Sample Dataset: California Housing")
+        st.header("Sample Dataset: California Housing")
         st.write(df.head())
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with regression models (like Linear Regression).')
@@ -55,7 +55,7 @@ else:
         cancer = load_breast_cancer()
         df = pd.DataFrame(data=cancer.data, columns=cancer.feature_names)
         df['diagnosis'] = cancer.target
-        st.write("Sample Dataset: Breast Cancer")
+        st.header("Sample Dataset: Breast Cancer")
         st.write(df.head())
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
@@ -67,7 +67,7 @@ else:
         diabetes = load_diabetes()
         df = pd.DataFrame(data=diabetes.data, columns=diabetes.feature_names)
         df['disease_progression'] = diabetes.target
-        st.write("Sample Dataset: Diabetes")
+        st.header("Sample Dataset: Diabetes")
         st.write(df.head())
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with regression models (like Linear Regression).')
@@ -80,7 +80,7 @@ else:
         iris = load_iris()
         df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
         df['species'] = iris.target
-        st.write("Sample Dataset: Iris")
+        st.header("Sample Dataset: Iris")
         st.write(df.head())
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
@@ -123,14 +123,14 @@ if model_option == 'Linear Regression':
         r2_scaled = r2_score(y_test, y_pred_scaled)
 
         # Display the evaluation metrics in Streamlit
-        st.write("Scaled Data Model Evaluation Metrics:")
+        st.header("Scaled Data Model Evaluation Metrics:")
         st.write(f'Mean Squared Error: {mse_scaled:.2f}')
         st.write(f'Root Mean Squared Error: {rmse_scaled:.2f}')
         st.write(f'R² Score: {r2_scaled:.2f}')
 
-        st.write("\nModel Coefficients (Scaled):")
+        st.header("\nModel Coefficients (Scaled):")
         st.write(pd.Series(lin_reg_scaled.coef_, index=features))
-        st.write("\nModel Intercept (Scaled):")
+        st.header("\nModel Intercept (Scaled):")
         st.write(lin_reg_scaled.intercept_)
 
 if model_option == 'Logistic Regression':
@@ -165,41 +165,50 @@ if model_option == 'Logistic Regression':
         
         # Calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
-        st.write(f"Accuracy: {accuracy:.2f}")
 
         # Generate confusion matrix
         cm = confusion_matrix(y_test, y_pred)
-        st.write("Confusion Matrix:")
         fig, ax = plt.subplots(figsize=(6, 6))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
         ax.set_title('Confusion Matrix')
         ax.set_xlabel('Predicted')
         ax.set_ylabel('Actual')
+        st.header("Confusion Matrix")
+        st.write(f"Accuracy: {accuracy:.2f}")
         st.pyplot(fig)
 
         # Display classification report
         report = classification_report(y_test, y_pred)
-        st.markdown("### Classification Report")
+        st.header("Classification Report")
         st.markdown(f'```\n{report}\n```')
 
-        # Get the predicted probabilities for the positive class (survival)
-        y_probs = model.predict_proba(X_test_scaled)[:, 1]
+        # Check number of unique classes in target
+        unique_classes = y_test.nunique()
 
-        # Calculate the False Positive Rate (FPR), True Positive Rate (TPR), and thresholds
-        fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+        if unique_classes == 2:
+            # Binary classification → show ROC curve
+            try:
+                y_probs = model.predict_proba(X_test_scaled)[:, 1]
+                fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+                roc_auc = roc_auc_score(y_test, y_probs)
 
-        # Compute the Area Under the Curve (AUC) score
-        roc_auc = roc_auc_score(y_test, y_probs)
-        st.write(f"ROC AUC Score: {roc_auc:.2f}")
+                # Plot ROC Curve
+                fig_roc, ax_roc = plt.subplots(figsize=(8, 6))
+                ax_roc.plot(fpr, tpr, lw=2, label=f'ROC Curve (AUC = {roc_auc:.2f})')
+                ax_roc.plot([0, 1], [0, 1], lw=2, linestyle='--', label='Random Guess')
+                ax_roc.set_xlabel('False Positive Rate')
+                ax_roc.set_ylabel('True Positive Rate')
+                ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
+                ax_roc.legend(loc="lower right")
+                st.header("ROC Curve")
+                st.write(f"ROC AUC Score: {roc_auc:.2f}")
+                st.pyplot(fig_roc)
 
-        fig_roc, ax_roc = plt.subplots(figsize=(8, 6))
-        ax_roc.plot(fpr, tpr, lw=2, label=f'ROC Curve (AUC = {roc_auc:.2f})')
-        ax_roc.plot([0, 1], [0, 1], lw=2, linestyle='--', label='Random Guess')
-        ax_roc.set_xlabel('False Positive Rate')
-        ax_roc.set_ylabel('True Positive Rate')
-        ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
-        ax_roc.legend(loc="lower right")
-        st.pyplot(fig_roc)
+            except Exception as e:
+                st.error(f"Error computing ROC curve: {e}")
+        else:
+            # Multiclass → show message
+            st.write("ROC curve is only available for binary classification problems.")
 
 if model_option == 'Decision Tree':
 
@@ -237,10 +246,10 @@ if model_option == 'Decision Tree':
 
         y_pred = model.predict(X_test_scaled)
         accuracy = accuracy_score(y_test, y_pred)
-        st.write(f"Accuracy: {accuracy:.2f}")
 
         cm = confusion_matrix(y_test, y_pred)
-        st.write("Confusion Matrix:")
+        st.header("Confusion Matrix:")
+        st.write(f"Accuracy: {accuracy:.2f}")
         fig, ax = plt.subplots(figsize=(6, 6))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
         ax.set_title('Confusion Matrix')
@@ -250,7 +259,7 @@ if model_option == 'Decision Tree':
 
         # Display classification report
         report = classification_report(y_test, y_pred)
-        st.markdown("### Classification Report")
+        st.header("Classification Report")
         st.markdown(f'```\n{report}\n```')
 
         # Dynamic class names
@@ -265,6 +274,7 @@ if model_option == 'Decision Tree':
             rounded=True,
             special_characters=True
         )
+        st.header("Decision Tree")
         st.graphviz_chart(dot_data)
 
        # Check number of unique classes in target
@@ -276,7 +286,6 @@ if model_option == 'Decision Tree':
                 y_probs = model.predict_proba(X_test_scaled)[:, 1]
                 fpr, tpr, thresholds = roc_curve(y_test, y_probs)
                 roc_auc = roc_auc_score(y_test, y_probs)
-                st.write(f"ROC AUC Score: {roc_auc:.2f}")
 
                 # Plot ROC Curve
                 fig_roc, ax_roc = plt.subplots(figsize=(8, 6))
@@ -286,6 +295,8 @@ if model_option == 'Decision Tree':
                 ax_roc.set_ylabel('True Positive Rate')
                 ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
                 ax_roc.legend(loc="lower right")
+                st.header("ROC Curve")
+                st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.pyplot(fig_roc)
 
             except Exception as e:
