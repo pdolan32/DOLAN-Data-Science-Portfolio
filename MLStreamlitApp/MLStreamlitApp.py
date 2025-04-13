@@ -233,11 +233,12 @@ if model_option == 'Logistic Regression': # If the user chooses Logistic Regress
                 ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
                 ax_roc.legend(loc="lower right")
                 st.header("ROC Curve")
-                # Display AUC Score
-                st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.pyplot(fig_roc)
 
                 st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
+
+                # Display AUC Score
+                st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
 
             except Exception as e:
@@ -347,11 +348,12 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
                 ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
                 ax_roc.legend(loc="lower right")
                 st.header("ROC Curve")
-                # Display AUC Score
-                st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.pyplot(fig_roc)
 
                 st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
+
+                # Display AUC Score
+                st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
 
             except Exception as e:
