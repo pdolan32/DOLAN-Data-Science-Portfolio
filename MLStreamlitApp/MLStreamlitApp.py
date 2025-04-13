@@ -31,6 +31,8 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
         df = pd.read_csv(uploaded_file)
         st.write("Uploaded Dataset:")
         st.write(df.head()) # The first five rows of the dataset are displayed
+        st.subheader("Summary Statistics")
+        st.write(df.describe()) # Summary statistics and information are displayed
 
 else: # If the user chooses to select a sample dataset
     # A selectbox is created in the sidebar for the user to choose from a variety of sample datasets
@@ -46,6 +48,8 @@ else: # If the user chooses to select a sample dataset
         df['MedHouseValue'] = housing.target # display the target variable in the dataframe
         st.header("Sample Dataset: California Housing")
         st.write(df.head()) # The first five rows of the dataset are displayed
+        st.subheader("Summary Statistics")
+        st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with regression models (like Linear Regression).')
@@ -59,6 +63,8 @@ else: # If the user chooses to select a sample dataset
         df['diagnosis'] = cancer.target # display the target variable in the dataframe
         st.header("Sample Dataset: Breast Cancer")
         st.write(df.head()) # The first five rows of the dataset are displayed
+        st.subheader("Summary Statistics")
+        st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
@@ -73,6 +79,8 @@ else: # If the user chooses to select a sample dataset
         df['disease_progression'] = diabetes.target # display the target variable in the dataframe
         st.header("Sample Dataset: Diabetes") 
         st.write(df.head()) # The first five rows of the dataset are displayed
+        st.subheader("Summary Statistics")
+        st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with regression models (like Linear Regression).')
@@ -88,6 +96,8 @@ else: # If the user chooses to select a sample dataset
         df['species'] = iris.target # display the target variable in the dataframe
         st.header("Sample Dataset: Iris")
         st.write(df.head()) # The first five rows of the dataset are displayed
+        st.subheader("Summary Statistics")
+        st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
         ' This dataset works best with classification models (like Logistic Regression and Decision Trees).')
@@ -134,8 +144,11 @@ if model_option == 'Linear Regression': # If the user chooses Linear Regression
         # Display the evaluation metrics in Streamlit
         st.header("Scaled Data Model Evaluation Metrics:")
         st.write(f'Mean Squared Error: {mse_scaled:.2f}')
+        st.write('The Mean Squared Error tells you how far off the model predictions are from the actual values: larger errors are penalized more because the differences are squared. A lower value is generally better.')
         st.write(f'Root Mean Squared Error: {rmse_scaled:.2f}')
+        st.write('The Root Mean Squared Error is similar to the MSE, but  it takes the square root, so it is in the same units as the target variable. A lower value is once again generally better.')
         st.write(f'R² Score: {r2_scaled:.2f}')
+        st.write('The R² score tells you how much of the variance in the target variable the model is able to explain. This score is between 0 and 1, with higher scores generally being better.')
 
         st.header("\nModel Coefficients (Scaled):")
         st.write(pd.Series(lin_reg_scaled.coef_, index=features))
@@ -185,12 +198,21 @@ if model_option == 'Logistic Regression': # If the user chooses Logistic Regress
         ax.set_ylabel('Actual')
         st.header("Confusion Matrix")
         st.write(f"Accuracy: {accuracy:.2f}")
+        st.write('In logistic regression, the accuracy score tells you the percentage of correct predictions or classifications the model made, out of all predictions. A higher score is generally better.')
         st.pyplot(fig)
+        st.write('In logistic regression, the confusion matrix provides a clear, detailed look at how well the model is classifying the data: not just whether the model is right or wrong, but how it is right or wrong. ' \
+        ' This matrix is useful to identify which types of errors the model may be making by comparing predicted classifications to actual classifications.')
 
         # Display classification report
         report = classification_report(y_test, y_pred)
         st.header("Classification Report")
         st.markdown(f'```\n{report}\n```')
+
+        st.write('The Classification Report provides the following assessments:')
+        st.write('Precision: out of all predicted positives, how many were actually correct?')
+        st.write('Recall: out of all actual positives, how many were actually correct?')
+        st.write('F-1 Score: a harmonic mean of precision and recall.')
+        st.write('Support: the number of actual instances of each class in the test set.')
 
         # Check number of unique classes in the target variable
         unique_classes = y_test.nunique()
@@ -214,6 +236,9 @@ if model_option == 'Logistic Regression': # If the user chooses Logistic Regress
                 # Display AUC Score
                 st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.pyplot(fig_roc)
+
+                st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
+                st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
 
             except Exception as e:
                 st.error(f"Error computing ROC curve: {e}")
@@ -262,23 +287,30 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
 
         # Calculate accuracy
         accuracy = accuracy_score(y_test, y_pred)
-
+        
         # Generate and display the confusion matrix
         cm = confusion_matrix(y_test, y_pred)
         st.header("Confusion Matrix:")
         st.write(f"Accuracy: {accuracy:.2f}")
+        st.write('In a decision tree model, the accuracy score tells you the percentage of correct predictions or classifications the model made, out of all predictions. A higher score is generally better.')
         fig, ax = plt.subplots(figsize=(6, 6))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
         ax.set_title('Confusion Matrix')
         ax.set_xlabel('Predicted')
         ax.set_ylabel('Actual')
         st.pyplot(fig)
+        st.write('In a decision tree model, the confusion matrix provides a clear, detailed look at how well the model is classifying the data: not just whether the model is right or wrong, but how it is right or wrong. ' \
+        ' This matrix is useful to identify which types of errors the model may be making by comparing predicted classifications to actual classifications.')
 
         # Display classification report
         report = classification_report(y_test, y_pred)
         st.header("Classification Report")
         st.markdown(f'```\n{report}\n```')
-
+        st.write('The Classification Report provides the following assessments:')
+        st.write('Precision: out of all predicted positives, how many were actually correct?')
+        st.write('Recall: out of all actual positives, how many were actually correct?')
+        st.write('F-1 Score: a harmonic mean of precision and recall.')
+        st.write('Support: the number of actual instances of each class in the test set.')
         # Establish dynamic class names in the decision tree (makes the code more flexible across datasets)
         class_names = [str(cls) for cls in np.unique(y_train)]
 
@@ -293,6 +325,8 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
         )
         st.header("Decision Tree")
         st.graphviz_chart(dot_data)
+        st.write('A decision tree visual illustrates how decisions are made based on the features of the dataset: specifically, it shows which features matter, and in what order they are used to split the data.' \
+        ' Using yes-or-no questions at every node, the tree splits the data based on a feature that best separates the classes or reduces error.')
 
        # Check number of unique classes in the target variable
         unique_classes = y_test.nunique()
@@ -317,8 +351,12 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
                 st.write(f"ROC AUC Score: {roc_auc:.2f}")
                 st.pyplot(fig_roc)
 
+                st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
+                st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
+
             except Exception as e:
                 st.error(f"Error computing ROC curve: {e}")
         else:
             # If the target variable is multiclass, the ROC curve is not generated nor displayed (avoids an error message as ROC curve is designed for binary classification)
+            st.header("ROC Curve")
             st.write("ROC curve is only available for binary classification problems.")
