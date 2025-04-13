@@ -1,12 +1,11 @@
-# 📈 Machine Learning App
-This machine learning app interactive Streamlit-based app for exploring datasets and applying supervised machine learning models. This project aims to offer users an intuitive interface that makes it easy to apply supervised machine learning models to datasets efficiently: interactive menus and customizable widgets allow users to tailor their experience to fit their specific analytical needs.
+# 📈 Machine Learning App Overview:
+This interactive Streamlit app provides an intuitive platform for exploring datasets and applying supervised machine learning models. This app was designed with usability in mind and features dynamic menus and customizable widgets that enables users to tailor their analysis to specific needs or requirements.
 
-# 🚀 Project Overview:
-This project allows users to:
-- Upload their own dataset or choose from built-in sample datasets.
-- Select from a variety of supervised machine learning models (both regression and classification)
-- Choose the target and feature variables.
-- Visualize model performance with 
+With this app, users can:
+- Upload their own datasets or choose from built-in sample datasets
+- Select from a range of supervised learning models for both regression and classification
+- Define and customize target and feature variables
+- Visualize model performance with tools like confusion matrices, decision trees, and ROC curves
 
 # 🚀 Instructions:
 
@@ -21,11 +20,21 @@ Ensure you have the following installed before running this app:
 - seaborn (v. 0.13.2)
 - graphviz (v. 0.20.3)
 
+### Running the Application
 
+First, clone the DOLAN-Data-Science-Portfolio repository to create a local copy on your computer: clone the repository by downloading the repository as a ZIP file. Then, extract the downloaded ZIP file to reveal a folder containing all the repository project files. Next, navigate to the MLStreamlitApp folder within the extracted content, and upload this folder as your working directory. This folder should include the MLStreamlitApp.py file, as well as the README.md file.
 
-# App Features:
+To launch the application, use the following command in your terminal:
 
-This machine learning app includes Linear Regression, Logistic Regression, and Decision Tree models.
+```bash
+streamlit run MLStreamlitApp.py
+```
+
+The app should open automatically in your default web browser.
+
+# ⚙️ App Features:
+
+This machine learning app includes the following supervised learning machine models: Linear Regression, Logistic Regression, and Decision Trees. Below is a more detailed explanation of how each of these models are implemented within the app.
 
 ## Linear Regression
 
@@ -54,6 +63,6 @@ Furthermore, within the Decision Tree model, users can set and customize key **h
 - the minimum number of samples required to split an internal node
 - the minimum number of samples that must be present in a leaf node
 
-## Visualizations
-
 Once these options are configured, the app provides the accuracy score, a classification report, and an AUC score. Furthermore, the app provides visualizations such as a confusion matrix, a decision tree, and a ROC Curve.
+
+## Visualizations
