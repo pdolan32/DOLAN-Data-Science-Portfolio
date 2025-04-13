@@ -15,10 +15,10 @@ from sklearn.preprocessing import StandardScaler
 # Title of the app
 st.title('Machine Learning Dataset Analysis')
 
-st.write('To begin, either upload a dataset or choose a sample dataset from the dropdown menu.')
+st.write('To begin, consult the sidebar to either upload a dataset or choose from a sample of datasets.')
 
 # Sidebar for user input
-option = st.sidebar.selectbox('Choose Dataset Option', ('Upload Your Own', 'Use Sample Dataset'))
+option = st.sidebar.radio('Choose Dataset Option', ('Upload Your Own', 'Use Sample Dataset'))
 
 # Upload Dataset
 if option == 'Upload Your Own':
