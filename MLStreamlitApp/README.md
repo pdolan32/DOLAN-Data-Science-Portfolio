@@ -65,4 +65,14 @@ Furthermore, within the Decision Tree model, users can set and customize key **h
 
 Once these options are configured, the app provides the accuracy score, a classification report, and an AUC score. Furthermore, the app provides visualizations such as a confusion matrix, a decision tree, and a ROC Curve.
 
+## 📝 References
+
+Grokking Machine Learning Chapter 7: Classification Models. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLStreamlitApp/GrokkingML_Measuring%20Classification%20Models-1.pdf) to view this reference.
+
+Grokking Machine Learning Chapter 9: Decision Trees. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLStreamlitApp/GrokkingML_Decision%20Trees.pdf) to view this reference.
+
+Streamlit Website: Input Widgets. Click [HERE](https://docs.streamlit.io/develop/api-reference/widgets) to access this reference (external website).
+
+Scikit-Learn: Toy Datasets. Click [HERE](https://scikit-learn.org/stable/datasets/toy_dataset.html) to access this reference (external website).
+
 ## Visualizations
