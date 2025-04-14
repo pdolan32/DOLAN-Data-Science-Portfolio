@@ -14,7 +14,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 
 # Write in the title of the app
-st.title('Machine Learning Dataset Analysis')
+st.title('Supervised Machine Learning Dataset Analysis')
 
 # Write in the preliminary app instructions
 st.write('To begin, consult the sidebar to either upload a dataset or choose from a sample of datasets.')
@@ -31,7 +31,7 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
         df = pd.read_csv(uploaded_file)
         st.write("Uploaded Dataset:")
         st.write(df.head()) # The first five rows of the dataset are displayed
-        st.subheader("Summary Statistics")
+        st.subheader("Summary Statistics:")
         st.write(df.describe()) # Summary statistics and information are displayed
 
 else: # If the user chooses to select a sample dataset
@@ -48,7 +48,7 @@ else: # If the user chooses to select a sample dataset
         df['MedHouseValue'] = housing.target # display the target variable in the dataframe
         st.header("Sample Dataset: California Housing")
         st.write(df.head()) # The first five rows of the dataset are displayed
-        st.subheader("Summary Statistics")
+        st.subheader("Summary Statistics:")
         st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
@@ -63,7 +63,7 @@ else: # If the user chooses to select a sample dataset
         df['diagnosis'] = cancer.target # display the target variable in the dataframe
         st.header("Sample Dataset: Breast Cancer")
         st.write(df.head()) # The first five rows of the dataset are displayed
-        st.subheader("Summary Statistics")
+        st.subheader("Summary Statistics:")
         st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
@@ -79,7 +79,7 @@ else: # If the user chooses to select a sample dataset
         df['disease_progression'] = diabetes.target # display the target variable in the dataframe
         st.header("Sample Dataset: Diabetes") 
         st.write(df.head()) # The first five rows of the dataset are displayed
-        st.subheader("Summary Statistics")
+        st.subheader("Summary Statistics:")
         st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
@@ -96,7 +96,7 @@ else: # If the user chooses to select a sample dataset
         df['species'] = iris.target # display the target variable in the dataframe
         st.header("Sample Dataset: Iris")
         st.write(df.head()) # The first five rows of the dataset are displayed
-        st.subheader("Summary Statistics")
+        st.subheader("Summary Statistics:")
         st.write(df.describe()) # Summary statistics and information are displayed
         # Further instructions are suggested
         st.write('To analyze this dataset, please choose a supervised machine learning model from the sidebar.' \
@@ -211,7 +211,7 @@ if model_option == 'Logistic Regression': # If the user chooses Logistic Regress
         st.write('The Classification Report provides the following assessments:')
         st.write('Precision: out of all predicted positives, how many were actually correct?')
         st.write('Recall: out of all actual positives, how many were actually correct?')
-        st.write('F-1 Score: a harmonic mean of precision and recall.')
+        st.write('F1-Score: a harmonic mean of precision and recall.')
         st.write('Support: the number of actual instances of each class in the test set.')
 
         # Check number of unique classes in the target variable
@@ -238,13 +238,14 @@ if model_option == 'Logistic Regression': # If the user chooses Logistic Regress
                 st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
 
                 # Display AUC Score
-                st.write(f"ROC AUC Score: {roc_auc:.2f}")
+                st.subheader(f"ROC AUC Score: {roc_auc:.2f}")
                 st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
 
             except Exception as e:
                 st.error(f"Error computing ROC curve: {e}")
         else:
             # If the target variable is multiclass, the ROC curve is not generated nor displayed (avoids an error message as ROC curve is designed for binary classification)
+            st.header("ROC Curve")
             st.write("ROC curve is only available for binary classification problems.")
 
 if model_option == 'Decision Tree': # If the user chooses Decision Tree
@@ -258,9 +259,9 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
     features = st.sidebar.multiselect('Choose Features', available_features)
 
     # Create hyperparameter sliders in the sidebar to allow user to set and change hyperparameter values
-    max_depth = st.sidebar.slider('Max Depth of Decision Tree', min_value=1, max_value=20, value=3)
+    max_depth = st.sidebar.slider('Max Depth of Decision Tree', min_value=1, max_value=15, value=3)
     min_samples_split = st.sidebar.slider('Min Samples Split', min_value=2, max_value=20, value=2)
-    min_samples_leaf = st.sidebar.slider('Min Samples Leaf', min_value=1, max_value=20, value=1)
+    min_samples_leaf = st.sidebar.slider('Min Samples Leaf', min_value=1, max_value=10, value=1)
 
     if target and features:
         # Prepare data for model
@@ -310,7 +311,7 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
         st.write('The Classification Report provides the following assessments:')
         st.write('Precision: out of all predicted positives, how many were actually correct?')
         st.write('Recall: out of all actual positives, how many were actually correct?')
-        st.write('F-1 Score: a harmonic mean of precision and recall.')
+        st.write('F1-Score: a harmonic mean of precision and recall.')
         st.write('Support: the number of actual instances of each class in the test set.')
         # Establish dynamic class names in the decision tree (makes the code more flexible across datasets)
         class_names = [str(cls) for cls in np.unique(y_train)]
@@ -325,10 +326,15 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
             special_characters=True
         )
         st.header("Decision Tree")
-        st.graphviz_chart(dot_data)
         st.write('A decision tree visual illustrates how decisions are made based on the features of the dataset: specifically, it shows which features matter, and in what order they are used to split the data.' \
         ' Using yes-or-no questions at every node, the tree splits the data based on a feature that best separates the classes or reduces error.')
-
+        st.graphviz_chart(dot_data)
+        st.subheader("Hyperparameter Tuning")
+        st.write('In the sidebar, there is a set of sliders that allow you for adjustments to the model hyperparameters. ' \
+        ' These sliders provide an intuitive way to experiment with different configurations, like the maximum depth of the tree the minimum number of samples required to split an internal node, and the minimum number of samples that must be present in a leaf node.' \
+        ' Adjusting these hyperparameters helps control the complexity of the model and discern a balance between underfitting and overfitting: the evaluation metrics dynamically change in response to hyperparameter tuning. ' \
+        ' Check out the sidebar to try adjusting the hyperparameters to find the combination of hyperparameters that yields the best model performance!')
+    
        # Check number of unique classes in the target variable
         unique_classes = y_test.nunique()
 
@@ -353,7 +359,7 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
                 st.write('The ROC curve is a graph that shows how good the model is at distinguishing between two classes. Essentially, the ROC curve visualizes the tradeoff between recall and false positives at different thresholds.')
 
                 # Display AUC Score
-                st.write(f"ROC AUC Score: {roc_auc:.2f}")
+                st.subheader(f"ROC AUC Score: {roc_auc:.2f}")
                 st.write('The AUC (Area Under the Curve) score provides a single scalar value to summarize the performance of the model. It ranges is from 0 to 1. A score of 1 signifies the model is a perfect classifier. A score of 0.5 means the model has no discriminative power (similar to guessing). A score less than 0.5 means the model may be confusing the two classes.')
 
             except Exception as e:
