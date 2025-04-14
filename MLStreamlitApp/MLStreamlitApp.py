@@ -259,6 +259,7 @@ if model_option == 'Decision Tree': # If the user chooses Decision Tree
     features = st.sidebar.multiselect('Choose Features', available_features)
 
     # Create hyperparameter sliders in the sidebar to allow user to set and change hyperparameter values
+    st.sidebar.subheader('Hyperparameter Tuning:')
     max_depth = st.sidebar.slider('Max Depth of Decision Tree', min_value=1, max_value=15, value=3)
     min_samples_split = st.sidebar.slider('Min Samples Split', min_value=2, max_value=20, value=2)
     min_samples_leaf = st.sidebar.slider('Min Samples Leaf', min_value=1, max_value=10, value=1)
