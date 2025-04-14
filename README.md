@@ -6,7 +6,7 @@ Welcome to my Data Science Portfolio! This repository showcases my data science 
 **Projects:** Each folder represents a unique data science project, including its code, datasets (if applicable), and a README with a project overview.  
 
 ## Machine Learning Application 📈
- **Link to the Tidy Data Project Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLStreamlitApp) to access the project repository.
+ **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLStreamlitApp) to access the project repository.
 
 In this project, I created an interactive Streamlit application that provides users with an intuitive platform for exploring datasets and applying supervised machine learning models. Within the app, users can upload their own datasets or choose from built-in sample datasets and select from a range of supervised learning models for both regression and classification. Furthermore, users are able to define and customize target and feature variables and hyperparameters and visualize model performance with tools like confusion matrices, decision trees, and ROC curves. The process of building this app strengthened my understanding of machine learning by reinforcing core concepts like data preprocessing, model selection, and performance evaluation. Moverover, it also gave me a clearer grasp of the similarities and differences between various types of supervised learning models and how to apply them effectively.
 
