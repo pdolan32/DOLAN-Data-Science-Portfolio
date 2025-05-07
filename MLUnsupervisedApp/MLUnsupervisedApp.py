@@ -252,6 +252,10 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
 
     if model_option == 'K-Means Clustering': # Only run this block if the user selected K-Means Clustering in the sidebar.
 
+        st.subheader('K-Means Clustering')
+        st.write('The unsupervised learning model you have chosen is: K-Means Clustering. K-Means Clustering is an unsupervised machine learning algorithm used to group data into "k" distinct clusters based on similarity. The algorithm partitions the dataset into k clusters such that each data point belongs to the cluster with the nearest mean (centroid).')
+        st.write('Note: since K-Means Clustering relies on distance calculations and can be biased by the scale of features, the data is centered and scaled')
+
         # Uses StandardScaler to center and scale the features: this is crucial for K-Means Clustering since it uses Euclidean distance.
         scaler = StandardScaler()
         X_std = scaler.fit_transform(X)
@@ -266,7 +270,10 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         pca = PCA(n_components=2)
         X_pca = pca.fit_transform(X_std)
 
-        # --- Plot 1: KMeans Cluster Labels in PCA Space ---
+        # --- Plot 1: K-Means Cluster Labels in PCA Space ---
+        st.subheader('K-Means Cluster Labels in PCA Space')
+        st.write('KMeans clustering partitions the data into k clusters by iteratively assigning points to the nearest cluster centroid and then updating the centroids based on the mean of the clusters.')
+        st.write('Visualizations reveal how well K-Means Clustering has partitioned the data; however, many datasets are high-dimensional, so the datasets are first reduced to 2 dimensions using PCA for visualization. Then, the PCA scores are plotted with colors corresponding to the cluster assignments.')
         fig1, ax1 = plt.subplots(figsize=(8, 6)) # Plots the K-Means cluster assignments in PCA space.
 
         cluster_labels = np.unique(clusters)
@@ -289,6 +296,8 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig1)
 
         # --- Plot 2: True Labels (if provided) in PCA Space ---
+        st.subheader('Comparing Clusters with True Labels')
+        st.write('Even though K-Means Clustering is an unsupervised machine learning model, its cluster assignments can be compared with the actual labels to gauge performance.')
         fig2, ax2 = plt.subplots(figsize=(8, 6)) # Plots the true class labels 
 
         if y is not None: # Uses the same PCA projection to allow easy visual comparison between predicted clusters and true labels.
@@ -316,12 +325,19 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig2)
 
         # --- Accuracy Score ---
+        st.subheader('Accuracy Score')
+        st.write('Although K-Means Clustering is an unsupervised machine learning model, the accuracy score assesses how well the clusters match the true labels.')
+        st.write('Note: Since KMeans labels are arbitrary (e.g., 0 and 1) and may not match the true labels directly, accuracy for both the original labels and their complement is computed, and the higher value is chosen.')
         kmeans_accuracy = accuracy_score(y, clusters)
 
         st.write("Accuracy Score: {:.2f}%".format(kmeans_accuracy * 100))
 
         # --- Elbow Method + Silhouette Scores ---
-        ks = range(2, 11)
+        st.subheader('Evaluating the Best Number of Clusters')
+        st.write('The process of determining the optimal number of clusters is a common challenge in clustering applications. Two popular methods to address this concern are:')
+        st.markdown('**Elbow Method:** plot the Within-Cluster Sum of Squares (WCSS) against different values of k. The "elbow" point, where the rate of decrease sharply changes, suggests an optimal value for k.')
+        st.markdown('**Silhouette Score:** quantifies how similar an object is to its own cluster compared to other clusters. A higher silhouette score indicates better clustering. The average silhouette score is calculatedfor different values of k and the one with the highest score is selected.')
+        ks = range(2, k + 1)
         wcss = []
         silhouette_scores = []
         
@@ -343,6 +359,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.dataframe(metrics_df.style.format({"WCSS": "{:.2f}", "Silhouette Score": "{:.3f}"}))
 
         # --- Plot 3: Elbow Method and Silhouette Scores ---
+        st.markdown('#### Visualizations for Elbow Method and Silhouette Score')
         fig3, (ax3a, ax3b) = plt.subplots(1, 2, figsize=(12, 5))
 
         # Elbow curve (WCSS vs. k)
@@ -363,6 +380,10 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig3)
 
     if model_option == 'Hierarchical Clustering': 
+
+        st.subheader('Hierarchical Clustering')
+        st.write('The unsupervised learning model you have chosen is: Hierarchical Clustering. Hierarchical Clustering is an unsupervised machine learning algorithm used to group similar data points into clusters based on their distance or similarity to one another.')
+        st.write('Note: since Hierarchical Clustering relies on Euclidian distance, the data is centered and scaled')
         
         # Uses StandardScaler to center and scale the features: this is crucial for distance-based clustering methods like hierarchical clustering.
         scaler = StandardScaler() 
@@ -373,6 +394,14 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1) # Lets the user choose how many clusters they want to form.
 
         # --- Dendrogram ---
+        st.subheader('Dendrogram')
+        st.write('The dendrogram, or the hierarchical tree, is a visual representation of the hierarchical clustering process: it shows how individual data points are grouped step by step into clusters, based on their similarity.')
+        st.write('The dendrogram provides two insights:  similarity structure (who merges early), and reasonable cut heights (horizontal line) for k clusters.')
+        st.write('The linkage option in hierarchical clustering can be changed in the sidebar, which affects how distances between clusters are calculated, which in turn impacts how clusters are formed and what the dendrogram looks like. The linkage methods are as follows:')
+        st.markdown('**Ward (default in many cases):** merges clusters that result in the smallest increase in total within-cluster variance.')
+        st.markdown('**Single:** merges clusters with the smallest minimum distance between any two points.')
+        st.markdown('**Complete:** merges clusters with the smallest maximum distance between points.')
+        st.markdown('**Average:** uses the average distance between all points in two clusters.')
         Z = linkage(X_scaled, method=linkage_option) # Computes the hierarchical clustering tree (Z) using the selected linkage method.
 
         if y is not None:
@@ -380,16 +409,52 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         else:
             labels = df.index.astype(str).tolist()
 
-        st.write("### Dendrogram") # Plots the dendrogram showing the hierarchical merging of clusters.
         fig1, ax1 = plt.subplots(figsize=(20, 7))
-        dendrogram(Z, labels=labels, ax=ax1)
+        dendrogram(Z, truncate_mode='lastp', labels=labels, ax=ax1)
         ax1.set_title("Hierarchical Clustering Dendrogram")
         ax1.set_xlabel("Sample")
         ax1.set_ylabel("Distance")
+        st.markdown('#### Dendrogram (Hierarchical Tree) Visualization')
         st.pyplot(fig1)
 
+        # --- Final Clustering with User-Selected k ---
+        # Applies agglomerative clustering with the chosen k and linkage method.
+        agg = AgglomerativeClustering(n_clusters=k, linkage=linkage_option)
+        cluster_labels = agg.fit_predict(X_scaled)
+
+        # Adds the cluster assignments to a copy of the original dataset.
+        clustered_df = df.copy()
+        clustered_df["Cluster"] = cluster_labels
+
+        # --- Clustered Table Preview ---
+        st.write("### Cluster Assignments (First 10 Rows)")
+        st.dataframe(clustered_df[[target_column, "Cluster"]].head(10)) # Shows the first 10 rows of the data with cluster assignments.
+
+        st.write("### Cluster Sizes")
+        st.dataframe(clustered_df["Cluster"].value_counts().reset_index().rename(columns={"index": "Cluster", "Cluster": "Count"})) # Displays the size (number of rows) in each cluster.
+
+        # --- PCA Visualization ---
+        st.subheader('Low‑Dimensional Insight with PCA')
+        st.markdown('PCA is **only** for display; it is **not** used to fit the clusters.')
+        # Reduces the data to 2D for visualization.
+        pca = PCA(n_components=2)
+        X_pca = pca.fit_transform(X_scaled)
+
+        st.markdown("### Cluster Visualization (PCA Reduced)") # Displays a colored scatter plot of the clusters in PCA space.
+        fig2, ax2 = plt.subplots(figsize=(10, 7))
+        # Uses color to differentiate clusters and adds a legend.
+        scatter = ax2.scatter(X_pca[:, 0], X_pca[:, 1], c=cluster_labels, cmap='viridis', s=60, edgecolor='k', alpha=0.7)
+        ax2.set_xlabel("Principal Component 1")
+        ax2.set_ylabel("Principal Component 2")
+        ax2.set_title(f"Agglomerative Clustering (PCA View, k={k}, linkage='{linkage_option}')")
+        ax2.legend(*scatter.legend_elements(), title="Clusters")
+        ax2.grid(True)
+        st.pyplot(fig2)
+
         # --- Silhouette Score Curve ---
-        st.write("### Silhouette Score Analysis")
+        st.subheader("Silhouette Score Analysis")
+        st.markdown('**Silhouette Score Analysis** is a method used to evaluate the quality of clustering in unsupervised machine learning. It tells you how well each data point fits within its assigned cluster and how distinct the clusters are from one another.')
+        st.write('The average silhouette score for all data points gives an overall measure of clustering performance.')
 
         # Set up a loop range and an empty list to compute silhouette scores for different cluster sizes
         k_range = range(2, 11)
@@ -412,35 +477,3 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig_sil)
 
         st.write(f"**Best k by silhouette score: {best_k}**  _(score = {max(sil_scores):.3f})_")
-
-        # --- Final Clustering with User-Selected k ---
-        # Applies agglomerative clustering with the chosen k and linkage method.
-        agg = AgglomerativeClustering(n_clusters=k, linkage=linkage_option)
-        cluster_labels = agg.fit_predict(X_scaled)
-
-        # Adds the cluster assignments to a copy of the original dataset.
-        clustered_df = df.copy()
-        clustered_df["Cluster"] = cluster_labels
-
-        # --- Clustered Table Preview ---
-        st.write("### Cluster Assignments (First 10 Rows)")
-        st.dataframe(clustered_df.head(10)) # Shows the first 10 rows of the data with cluster assignments.
-
-        st.write("### Cluster Sizes")
-        st.dataframe(clustered_df["Cluster"].value_counts().reset_index().rename(columns={"index": "Cluster", "Cluster": "Count"})) # Displays the size (number of rows) in each cluster.
-
-        # --- PCA Visualization ---
-        # Reduces the data to 2D for visualization.
-        pca = PCA(n_components=2)
-        X_pca = pca.fit_transform(X_scaled)
-
-        st.write("### Cluster Visualization (PCA Reduced)") # Displays a colored scatter plot of the clusters in PCA space.
-        fig2, ax2 = plt.subplots(figsize=(10, 7))
-        # Uses color to differentiate clusters and adds a legend.
-        scatter = ax2.scatter(X_pca[:, 0], X_pca[:, 1], c=cluster_labels, cmap='viridis', s=60, edgecolor='k', alpha=0.7)
-        ax2.set_xlabel("Principal Component 1")
-        ax2.set_ylabel("Principal Component 2")
-        ax2.set_title(f"Agglomerative Clustering (PCA View, k={k}, linkage='{linkage_option}')")
-        ax2.legend(*scatter.legend_elements(), title="Clusters")
-        ax2.grid(True)
-        st.pyplot(fig2)
