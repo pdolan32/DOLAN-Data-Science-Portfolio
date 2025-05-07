@@ -39,6 +39,33 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
         if st.sidebar.checkbox("Does your dataset include a target column?"):
             target_column = st.sidebar.selectbox("Select target column:", df.columns)
 
+        # --- Handle Missing Values ---
+        st.subheader("Missing Value Handling")
+
+        missing_info = df.isnull().sum()
+        if missing_info.any():
+            st.write("Missing values detected:")
+            st.write(missing_info[missing_info > 0])
+
+            missing_option = st.sidebar.radio(
+                "Choose how to handle missing values:",
+                ("Drop rows", "Fill with mean (numeric only)")
+            )
+
+            if missing_option == "Drop rows":
+                df = df.dropna()
+                st.write("Dropped rows with any missing values.")
+            elif missing_option == "Fill with mean (numeric only)":
+                numeric_cols = df.select_dtypes(include=np.number).columns
+                df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+                st.write("Filled missing numeric values with column means.")
+        else:
+            st.write("No missing values detected.")
+
+        # --- Show Preprocessed Data ---
+        st.subheader("Preprocessed Dataset Preview:")
+        st.write(df.head())
+
 else: # If the user selected not to upload their own data, this line displays a dropdown in the sidebar to let them pick from three built-in sample datasets.
     dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('Breast Cancer', 'Iris', 'Wine'))
 
@@ -395,8 +422,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
 
         # --- Dendrogram ---
         st.subheader('Dendrogram')
-        st.write('The dendrogram, or the hierarchical tree, is a visual representation of the hierarchical clustering process: it shows how individual data points are grouped step by step into clusters, based on their similarity.')
-        st.write('The dendrogram provides two insights:  similarity structure (who merges early), and reasonable cut heights (horizontal line) for k clusters.')
+        st.write('The dendrogram, or the hierarchical tree, is a visual representation of the hierarchical clustering process: it shows how individual data points are grouped step by step into clusters, based on their similarity. The dendrogram provides two insights:  similarity structure (who merges early), and reasonable cut heights (horizontal line) for k clusters.')
         st.write('The linkage option in hierarchical clustering can be changed in the sidebar, which affects how distances between clusters are calculated, which in turn impacts how clusters are formed and what the dendrogram looks like. The linkage methods are as follows:')
         st.markdown('**Ward (default in many cases):** merges clusters that result in the smallest increase in total within-cluster variance.')
         st.markdown('**Single:** merges clusters with the smallest minimum distance between any two points.')
@@ -440,7 +466,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         pca = PCA(n_components=2)
         X_pca = pca.fit_transform(X_scaled)
 
-        st.markdown("### Cluster Visualization (PCA Reduced)") # Displays a colored scatter plot of the clusters in PCA space.
+        st.markdown("##### Cluster Visualization (PCA Reduced)") # Displays a colored scatter plot of the clusters in PCA space.
         fig2, ax2 = plt.subplots(figsize=(10, 7))
         # Uses color to differentiate clusters and adds a legend.
         scatter = ax2.scatter(X_pca[:, 0], X_pca[:, 1], c=cluster_labels, cmap='viridis', s=60, edgecolor='k', alpha=0.7)
