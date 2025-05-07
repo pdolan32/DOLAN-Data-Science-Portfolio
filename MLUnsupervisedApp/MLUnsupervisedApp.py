@@ -33,6 +33,7 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
         st.write(df.head())
         st.subheader("Summary Statistics:")
         st.write(df.describe()) # Displays summary statistics (mean, std, min, max, etc.) for numeric columns in the uploaded dataset.
+        st.write('In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
 
         # Creates a checkbox in the sidebar. If the user checks it, they are saying their dataset includes a target column (i.e., a column they want to predict or analyze separately).
         if st.sidebar.checkbox("Does your dataset include a target column?"):
@@ -46,16 +47,19 @@ else: # If the user selected not to upload their own data, this line displays a 
         data = load_breast_cancer()
         st.write('This is the Breast Cancer dataset.' \
         ' This dataset is a well-known dataset used for binary classification, often to test models that distinguish between benign and malignant tumors: The target value is the diagnosis, with 0 = benign and 1 = malignant.')
+        st.write('In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
     elif dataset_option == 'Iris':
         data = load_iris()
         st.write('This is the Iris dataset.' \
         ' The Iris dataset contains information about 150 iris flowers from 3 different species.' \
         ' Each sample represents one flower, and the goal is to classify the species of the flower based on 4 features.' \
         ' The species of the Iris flower is categorical (0, 1, 2): Iris setosa, Iris versicolor, Iris virginica, respectively.')
+        st.write('In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
     elif dataset_option == 'Wine':
         data= load_wine()
         st.write('This is the Wine dataset.' \
-        ' This dataset is a classic multiclass classification dataset often used for testing machine learning models. It contains the chemical analysis of wines grown in the same region in Italy but derived from three different cultivars (classes).'
+        ' This dataset is a classic multiclass classification dataset often used for testing machine learning models. It contains the chemical analysis of wines grown in the same region in Italy but derived from three different cultivars (classes).')
+        st.write('In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
 
     df = pd.DataFrame(data.data, columns=data.feature_names) # Converts the feature data into a pandas DataFrame using the provided feature names as column headers.
     if hasattr(data, 'target'): # If the dataset has a .target attribute (which all three do), it adds it to the DataFrame as a 'target' column. It also sets:
@@ -66,7 +70,7 @@ else: # If the user selected not to upload their own data, this line displays a 
         target_names = None
 
     # Displays the dataset name, shows the first few rows of the dataset, and prints summary statistics for numerical columns.
-    st.write(f"Sample Dataset: {dataset_option}")
+    st.subheader(f"Sample Dataset: {dataset_option}")
     st.write(df.head())
     st.subheader("Summary Statistics:")
     st.write(df.describe())
@@ -89,6 +93,10 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
 
     if model_option == 'Principal Component Analysis': # Only run this block if the user selected Principal Component Analysis in the sidebar.
         
+        st.subheader('Principal Component Analysis')
+        st.write('The unsupervised learning model you have chosen is: Principal Component Analysis (PCA). PCA is a method used to reduce dimensionality by finding linear combinations of the features that capture maximum variance.')
+        st.write('Note: since PCA is sensitive to the scale of the variables, the data is centered and scaled')
+
         # Uses StandardScaler to center and scale the features
         scaler = StandardScaler()
         X_std = scaler.fit_transform(X)
@@ -103,6 +111,10 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         X_pca = pca.fit_transform(X_std)
 
         # Display the Explained Variance Ratio
+        st.subheader('Explained Variance Ratio')
+        st.write('The explained variance ratio details the proportion of variance explained by each component.')
+        st.write('Try using the slider on the sidebar to adjust the amount of components included in the analysis to see how much of the total variance each component explains.' \
+        ' Adjusting the amount of components will also influence some of the visualizations (see below).')
         explained_variance = pca.explained_variance_ratio_ # How much variance each principal component explains.
         cumulative_variance = np.cumsum(explained_variance) # Running total of variance explained by the components.
 
@@ -125,6 +137,9 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         color_map = plt.cm.get_cmap('tab10', n_classes) # If y (target labels) exist, it sets up a color map for up to 10 unique target values using matplotlib's 'tab10' palette.
 
         # --- 1. PCA 2D Scatter Plot ---
+        st.subheader('Scatter Plot of PCA Scores')
+        st.write('This scatter plot plots the data points in the new coordinate system defined by the first two principal components and helps visualize how the observations are spread out and whether distinct groups exist.')
+        st.write('Note: since the data is projected into two dimensions, only the first two principcal components are visualized here.')
         fig1, ax1 = plt.subplots(figsize=(8, 6))
         color_map = plt.get_cmap('tab10')
         if y is not None: # Checks if a target variable y (e.g., class labels) is available. If so, plot points with different colors based on their class.
@@ -143,6 +158,9 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig1) # Renders the figure in the Streamlit app.
 
         # --- 2. PCA Biplot with Feature Loadings ---
+        st.subheader('Biplot with Feature Loadings')
+        st.write('This biplot overlays the original feature vectors (loadings) on the scatter plot to interpret the direction and contribution of each feature in the reduced space.' \
+        ' The loading vectors indicate the direction in which the original features contribute most to the variance captured by the principal components.')
         loadings = pca.components_.T # Retrieves the loadings (a.k.a. component weights), which describe the contribution of each original feature to each principal component.
         scaling_factor = 50.0
         fig2, ax2 = plt.subplots(figsize=(8, 6))
@@ -167,6 +185,9 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.pyplot(fig2) # Renders the figure in the Streamlit app.
 
         # --- 3. Scree Plot of Cumulative Explained Variance ---
+        st.subheader('Scree Plot')
+        st.write('The scree plot displays the cumulative proportion of variance explained by the principal components: it is a valuable tool for deciding how many components to retain for further analysis.')
+        st.write('Note: adjusting the sidebar slider to increase/decrease the number of principal components will expand/reduce the following plots, respectively.')
         pca_full = PCA(n_components=n_components).fit(X_std) # Creates and fits a PCA model using up to the specified amount of components)
         cumulative_variance = np.cumsum(pca_full.explained_variance_ratio_) # Calculates the cumulative sum of the explained variance ratio
         fig3, ax3 = plt.subplots(figsize=(8, 6)) # Creates a new figure and axis for the line chart.
@@ -178,7 +199,11 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         ax3.grid(True)
         st.pyplot(fig3) # Renders the plot within the Streamlit app
 
+        st.write('Elbow Method: Look for the "elbow" in the plot - beyond this point, additional components contribute only marginal gains in explained variance.')
+
         # --- 4. Bar Plot of Individual Variance ---
+        st.subheader('Bar Plot')
+        st.write('The Bar Plot help to visualize the variance explained by each component.')
         fig4, ax4 = plt.subplots(figsize=(8, 6)) # Creates a new figure and axis for the bar plot.
         components = range(1, len(pca_full.explained_variance_ratio_) + 1) # Creates a range of component numbers (1-based) to use as x-axis labels.
         ax4.bar(components, pca_full.explained_variance_ratio_, alpha=0.7, color='teal') # Draws a bar for each principal component, where the height represents how much variance that component explains.
@@ -189,7 +214,9 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         ax4.grid(True, axis='y')
         st.pyplot(fig4) # Renders the chart within the Streamlit app
 
-        # --- 5. Combined Bar + Cumulative Line Plot ---
+        # --- 5. Combined Plot ---
+        st.subheader('Combined Plot')
+        st.write('This Combined Plot combines the scree and bar plots.')
         explained = pca_full.explained_variance_ratio_ * 100 # Converts the explained variance from a ratio to a percentage.
         components = np.arange(1, len(explained) + 1) # Generates component numbers starting at 1 (for display and labeling).
         cumulative = np.cumsum(explained) # Calculates the cumulative percentage of variance explained.
