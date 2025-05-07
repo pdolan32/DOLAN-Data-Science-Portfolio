@@ -44,10 +44,18 @@ else: # If the user selected not to upload their own data, this line displays a 
     # Depending on which dataset the user selects, it loads the corresponding dataset from sklearn.datasets.
     if dataset_option == 'Breast Cancer':
         data = load_breast_cancer()
+        st.write('This is the Breast Cancer dataset.' \
+        ' This dataset is a well-known dataset used for binary classification, often to test models that distinguish between benign and malignant tumors: The target value is the diagnosis, with 0 = benign and 1 = malignant.')
     elif dataset_option == 'Iris':
         data = load_iris()
+        st.write('This is the Iris dataset.' \
+        ' The Iris dataset contains information about 150 iris flowers from 3 different species.' \
+        ' Each sample represents one flower, and the goal is to classify the species of the flower based on 4 features.' \
+        ' The species of the Iris flower is categorical (0, 1, 2): Iris setosa, Iris versicolor, Iris virginica, respectively.')
     elif dataset_option == 'Wine':
         data= load_wine()
+        st.write('This is the Wine dataset.' \
+        ' This dataset is a classic multiclass classification dataset often used for testing machine learning models. It contains the chemical analysis of wines grown in the same region in Italy but derived from three different cultivars (classes).'
 
     df = pd.DataFrame(data.data, columns=data.feature_names) # Converts the feature data into a pandas DataFrame using the provided feature names as column headers.
     if hasattr(data, 'target'): # If the dataset has a .target attribute (which all three do), it adds it to the DataFrame as a 'target' column. It also sets:
