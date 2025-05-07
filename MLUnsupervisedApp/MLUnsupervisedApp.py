@@ -26,21 +26,22 @@ df = None
 
 if option == 'Upload Your Own': # If the user chooses to upload their own dataset
     
-    uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type='csv')
-    if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
+    uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type='csv') # Creates a file uploader widget in the sidebar, allowing users to upload .csv files.
+    if uploaded_file is not None: # This checks if the user has actually uploaded a file. If not, the rest of the code inside this block will not run.
+        df = pd.read_csv(uploaded_file) # Reads the uploaded CSV file into a pandas DataFrame called df.
         st.write("Uploaded Dataset:")
         st.write(df.head())
         st.subheader("Summary Statistics:")
-        st.write(df.describe())
+        st.write(df.describe()) # Displays summary statistics (mean, std, min, max, etc.) for numeric columns in the uploaded dataset.
 
-        # Optionally allow user to select a target column
+        # Creates a checkbox in the sidebar. If the user checks it, they are saying their dataset includes a target column (i.e., a column they want to predict or analyze separately).
         if st.sidebar.checkbox("Does your dataset include a target column?"):
             target_column = st.sidebar.selectbox("Select target column:", df.columns)
 
-else:
+else: # If the user selected not to upload their own data, this line displays a dropdown in the sidebar to let them pick from three built-in sample datasets.
     dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('Breast Cancer', 'Iris', 'Wine'))
 
+    # Depending on which dataset the user selects, it loads the corresponding dataset from sklearn.datasets.
     if dataset_option == 'Breast Cancer':
         data = load_breast_cancer()
     elif dataset_option == 'Iris':
@@ -48,46 +49,56 @@ else:
     elif dataset_option == 'Wine':
         data= load_wine()
 
-    df = pd.DataFrame(data.data, columns=data.feature_names)
-    if hasattr(data, 'target'):
+    df = pd.DataFrame(data.data, columns=data.feature_names) # Converts the feature data into a pandas DataFrame using the provided feature names as column headers.
+    if hasattr(data, 'target'): # If the dataset has a .target attribute (which all three do), it adds it to the DataFrame as a 'target' column. It also sets:
         df['target'] = data.target
-        target_column = 'target'
-        target_names = data.target_names if hasattr(data, 'target_names') else np.unique(data.target)
-    else:
+        target_column = 'target' # target_column to 'target' (to be used elsewhere in the app),
+        target_names = data.target_names if hasattr(data, 'target_names') else np.unique(data.target) # target_names to class names if available (e.g., 'malignant', 'benign'), or otherwise just the unique target values.
+    else: # If the dataset doesn't have a target, this avoids errors by setting target_names to None.
         target_names = None
 
+    # Displays the dataset name, shows the first few rows of the dataset, and prints summary statistics for numerical columns.
     st.write(f"Sample Dataset: {dataset_option}")
     st.write(df.head())
     st.subheader("Summary Statistics:")
     st.write(df.describe())
 
-if df is not None:
-    if target_column and target_column in df.columns:
-        X = df.drop(columns=[target_column])
-        y = df[target_column].values
-    else:
+if df is not None: # Checks whether a DataFrame (df) has been successfully loaded—either through a user upload or a sample dataset selection. 
+                   #If no dataset is loaded, the following code won’t run.
+
+    if target_column and target_column in df.columns: # Checks two things:
+                                                      # that a target column has been defined (i.e. target_column is not None).
+                                                      # that the specified target_column actually exists in the DataFrame df.
+        X = df.drop(columns=[target_column]) # All columns except the target column. This is the feature matrix.
+        y = df[target_column].values # The values in the target column. This is the label/target vector.
+    else: # If no valid target column was provided, it treats the entire dataset as X (all features)
         X = df.copy()
         y = None
         target_names = None
 
+    # Adds a dropdown in the sidebar for the user to select which analysis/model they want to run.
     model_option = st.sidebar.selectbox('Choose a Model', ('None', 'Principal Component Analysis', 'K-Means Clustering', 'Hierarchical Clustering'))
 
-    if model_option == 'Principal Component Analysis':
+    if model_option == 'Principal Component Analysis': # Only run this block if the user selected Principal Component Analysis in the sidebar.
+        
+        # Uses StandardScaler to center and scale the features
         scaler = StandardScaler()
         X_std = scaler.fit_transform(X)
 
-        max_components = min(X.shape[1], 15)  # Limit to 15 or total number of features
+        # The user can choose how many principal components to extract, from 2 up to a maximum of 15 or however many features the dataset has.
+        # Starts with a default of 2 for visualization purposes.
+        max_components = min(X.shape[1], 15)
         n_components = st.sidebar.slider('Number of Principal Components', 2, max_components, 2)
 
-        # The data is reduced to 2 components for visualization purposes and further analysis.
+        # Reduces the standardized feature data into 'n_components' principal components. X_pca is now the transformed dataset in the lower-dimensional space.
         pca = PCA(n_components=n_components)
         X_pca = pca.fit_transform(X_std)
 
-        # Display the Explained Variance Ratio (i.e., the proportion of variance explained by each component)
-        explained_variance = pca.explained_variance_ratio_
-        cumulative_variance = np.cumsum(explained_variance)
+        # Display the Explained Variance Ratio
+        explained_variance = pca.explained_variance_ratio_ # How much variance each principal component explains.
+        cumulative_variance = np.cumsum(explained_variance) # Running total of variance explained by the components.
 
-        # Format as percentages with 2 decimal places
+        # Outputs a table showing how much each component contributes to explaining the dataset’s variance.
         explained_df = pd.DataFrame({
             'Principal Component': [f'PC{i+1}' for i in range(len(explained_variance))],
             'Explained Variance (%)': (explained_variance * 100).round(2),
@@ -98,11 +109,12 @@ if df is not None:
         st.subheader("PCA Explained Variance")
         st.dataframe(explained_df)
 
+        # Prepares feature names for any further plotting
         feature_names = list(X.columns) if isinstance(X, pd.DataFrame) else [f"Feature {i}" for i in range(X.shape[1])]
         
         unique_labels = np.unique(y) if y is not None else []
         n_classes = len(unique_labels)
-        color_map = plt.cm.get_cmap('tab10', n_classes)
+        color_map = plt.cm.get_cmap('tab10', n_classes) # If y (target labels) exist, it sets up a color map for up to 10 unique target values using matplotlib's 'tab10' palette.
 
         # --- 1. PCA 2D Scatter Plot ---
         fig1, ax1 = plt.subplots(figsize=(8, 6))
@@ -203,35 +215,37 @@ if df is not None:
         plt.title('PCA: Variance Explained', pad=20)
         st.pyplot(fig5)
 
-    if model_option == 'K-Means Clustering': 
+    if model_option == 'K-Means Clustering': # Only run this block if the user selected K-Means Clustering in the sidebar.
 
+        # Uses StandardScaler to center and scale the features: this is crucial for K-Means Clustering since it uses Euclidean distance.
         scaler = StandardScaler()
         X_std = scaler.fit_transform(X)
 
-        # Set number of clusters (you can later make this a sidebar input)
+        # Adds a sidebar slider so the user can control how many clusters the K-Means algorithm tries to find.
         k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1)
+        # Fits the K-Means model and predicts cluster labels.
         kmeans = KMeans(n_clusters=k, random_state=42)
         clusters = kmeans.fit_predict(X_std)
 
-        # Reduce to 2D with PCA
+        # Reduces high-dimensional standardized data to 2 components for plotting.
         pca = PCA(n_components=2)
         X_pca = pca.fit_transform(X_std)
 
         # --- Plot 1: KMeans Cluster Labels in PCA Space ---
-        fig1, ax1 = plt.subplots(figsize=(8, 6))
+        fig1, ax1 = plt.subplots(figsize=(8, 6)) # Plots the K-Means cluster assignments in PCA space.
 
         cluster_labels = np.unique(clusters)
         n_clusters = len(cluster_labels)
-        # Use tab10 for up to 10 clusters, tab20 otherwise
+        # Each cluster is shown in a different color using matplotlib’s tab10 colormap.
         color_map = plt.cm.get_cmap('tab10')
 
-        for i in cluster_labels:
+        for i in cluster_labels: # plots each cluster group in a 2D PCA space
             ax1.scatter(
                 X_pca[clusters == i, 0], X_pca[clusters == i, 1],
                 color=color_map(i), alpha=0.7, edgecolor='k', s=60,
                 label=f'Cluster {i}'
             )
-
+        # Includes legend and labeled axes.
         ax1.set_xlabel('Principal Component 1')
         ax1.set_ylabel('Principal Component 2')
         ax1.set_title('KMeans Clustering: 2D PCA Projection')
@@ -240,14 +254,14 @@ if df is not None:
         st.pyplot(fig1)
 
         # --- Plot 2: True Labels (if provided) in PCA Space ---
-        fig2, ax2 = plt.subplots(figsize=(8, 6))
+        fig2, ax2 = plt.subplots(figsize=(8, 6)) # Plots the true class labels 
 
-        if y is not None:
+        if y is not None: # Uses the same PCA projection to allow easy visual comparison between predicted clusters and true labels.
             true_labels = np.unique(y)
             n_classes = len(true_labels)
             color_map = plt.cm.get_cmap('tab10')
 
-            for i in true_labels:
+            for i in true_labels: # creates one scatterplot layer per class, so that the PCA projection is color-coded by the actual class labels, and the plot legend reflects readable names.
                 label_name = str(target_names[i]) if target_names is not None else str(i)
                 ax2.scatter(
                     X_pca[y == i, 0], X_pca[y == i, 1],
@@ -259,6 +273,7 @@ if df is not None:
             ax2.scatter(X_pca[:, 0], X_pca[:, 1], c='gray', alpha=0.7, edgecolor='k', s=60)
             ax2.set_title('True Labels (Unavailable)')
 
+        # Includes legend and labeled axes.
         ax2.set_xlabel('Principal Component 1')
         ax2.set_ylabel('Principal Component 2')
         ax2.legend(loc='best')
@@ -274,32 +289,35 @@ if df is not None:
         ks = range(2, 11)
         wcss = []
         silhouette_scores = []
-
-        for k in ks:
+        
+        for k in ks: # Loops over a range of k values; computes WCSS and silhouette score for each one to help identify the optimal number of clusters.
             km = KMeans(n_clusters=k, random_state=42)
             km.fit(X_std)
             wcss.append(km.inertia_)
             labels = km.labels_
             silhouette_scores.append(silhouette_score(X_std, labels))
-
-        # Display metrics in a DataFrame
+        
+        # A DataFrame summarizing the scores
         metrics_df = pd.DataFrame({
             'WCSS': wcss,
             'Silhouette Score': silhouette_scores
         }, index=ks)
         metrics_df.index.name = "k"  # Label the index for clarity
 
+        # Display metrics in a DataFrame
         st.dataframe(metrics_df.style.format({"WCSS": "{:.2f}", "Silhouette Score": "{:.3f}"}))
 
         # --- Plot 3: Elbow Method and Silhouette Scores ---
         fig3, (ax3a, ax3b) = plt.subplots(1, 2, figsize=(12, 5))
 
+        # Elbow curve (WCSS vs. k)
         ax3a.plot(ks, wcss, marker='o')
         ax3a.set_xlabel('Number of Clusters (k)')
         ax3a.set_ylabel('WCSS')
         ax3a.set_title('Elbow Method for Optimal k')
         ax3a.grid(True)
 
+        # Silhouette score vs. k
         ax3b.plot(ks, silhouette_scores, marker='o', color='green')
         ax3b.set_xlabel('Number of Clusters (k)')
         ax3b.set_ylabel('Silhouette Score')
@@ -311,22 +329,23 @@ if df is not None:
 
     if model_option == 'Hierarchical Clustering': 
         
-        scaler = StandardScaler()
+        # Uses StandardScaler to center and scale the features: this is crucial for distance-based clustering methods like hierarchical clustering.
+        scaler = StandardScaler() 
         X_scaled = scaler.fit_transform(X)
 
         # --- Sidebar Controls ---
-        linkage_option = st.sidebar.selectbox("Linkage Method", ["ward", "complete", "average", "single"])
-        k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1)
+        linkage_option = st.sidebar.selectbox("Linkage Method", ["ward", "complete", "average", "single"]) # Lets the user choose how distances between clusters are calculated.
+        k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1) # Lets the user choose how many clusters they want to form.
 
         # --- Dendrogram ---
-        Z = linkage(X_scaled, method=linkage_option)
+        Z = linkage(X_scaled, method=linkage_option) # Computes the hierarchical clustering tree (Z) using the selected linkage method.
 
         if y is not None:
-            labels = y.astype(str).tolist()
+            labels = y.astype(str).tolist() # Sets labels for each sample in the dendrogram (true labels if available, or row indices).
         else:
             labels = df.index.astype(str).tolist()
 
-        st.write("### Dendrogram")
+        st.write("### Dendrogram") # Plots the dendrogram showing the hierarchical merging of clusters.
         fig1, ax1 = plt.subplots(figsize=(20, 7))
         dendrogram(Z, labels=labels, ax=ax1)
         ax1.set_title("Hierarchical Clustering Dendrogram")
@@ -337,15 +356,16 @@ if df is not None:
         # --- Silhouette Score Curve ---
         st.write("### Silhouette Score Analysis")
 
+        # Set up a loop range and an empty list to compute silhouette scores for different cluster sizes
         k_range = range(2, 11)
         sil_scores = []
 
-        for k_test in k_range:
+        for k_test in k_range: # Computes silhouette scores for k ranging from 2 to 10 to assess cluster quality.
             temp_labels = AgglomerativeClustering(n_clusters=k_test, linkage=linkage_option).fit_predict(X_scaled)
             score = silhouette_score(X_scaled, temp_labels)
             sil_scores.append(score)
 
-        best_k = k_range[np.argmax(sil_scores)]
+        best_k = k_range[np.argmax(sil_scores)] # Identifies and displays the k with the best silhouette score
 
         fig_sil, ax_sil = plt.subplots(figsize=(7, 4))
         ax_sil.plot(list(k_range), sil_scores, marker="o")
@@ -359,25 +379,29 @@ if df is not None:
         st.write(f"**Best k by silhouette score: {best_k}**  _(score = {max(sil_scores):.3f})_")
 
         # --- Final Clustering with User-Selected k ---
+        # Applies agglomerative clustering with the chosen k and linkage method.
         agg = AgglomerativeClustering(n_clusters=k, linkage=linkage_option)
         cluster_labels = agg.fit_predict(X_scaled)
 
+        # Adds the cluster assignments to a copy of the original dataset.
         clustered_df = df.copy()
         clustered_df["Cluster"] = cluster_labels
 
         # --- Clustered Table Preview ---
         st.write("### Cluster Assignments (First 10 Rows)")
-        st.dataframe(clustered_df.head(10))
+        st.dataframe(clustered_df.head(10)) # Shows the first 10 rows of the data with cluster assignments.
 
         st.write("### Cluster Sizes")
-        st.dataframe(clustered_df["Cluster"].value_counts().reset_index().rename(columns={"index": "Cluster", "Cluster": "Count"}))
+        st.dataframe(clustered_df["Cluster"].value_counts().reset_index().rename(columns={"index": "Cluster", "Cluster": "Count"})) # Displays the size (number of rows) in each cluster.
 
         # --- PCA Visualization ---
+        # Reduces the data to 2D for visualization.
         pca = PCA(n_components=2)
         X_pca = pca.fit_transform(X_scaled)
 
-        st.write("### Cluster Visualization (PCA Reduced)")
+        st.write("### Cluster Visualization (PCA Reduced)") # Displays a colored scatter plot of the clusters in PCA space.
         fig2, ax2 = plt.subplots(figsize=(10, 7))
+        # Uses color to differentiate clusters and adds a legend.
         scatter = ax2.scatter(X_pca[:, 0], X_pca[:, 1], c=cluster_labels, cmap='viridis', s=60, edgecolor='k', alpha=0.7)
         ax2.set_xlabel("Principal Component 1")
         ax2.set_ylabel("Principal Component 2")
