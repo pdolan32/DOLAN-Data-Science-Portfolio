@@ -314,8 +314,12 @@ if df is not None:
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
 
+        # --- Sidebar Controls ---
+        linkage_option = st.sidebar.selectbox("Linkage Method", ["ward", "complete", "average", "single"])
+        k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1)
+
         # --- Dendrogram ---
-        Z = linkage(X_scaled, method="ward")
+        Z = linkage(X_scaled, method=linkage_option)
 
         if y is not None:
             labels = y.astype(str).tolist()
@@ -336,8 +340,8 @@ if df is not None:
         k_range = range(2, 11)
         sil_scores = []
 
-        for k in k_range:
-            temp_labels = AgglomerativeClustering(n_clusters=k, linkage="ward").fit_predict(X_scaled)
+        for k_test in k_range:
+            temp_labels = AgglomerativeClustering(n_clusters=k_test, linkage=linkage_option).fit_predict(X_scaled)
             score = silhouette_score(X_scaled, temp_labels)
             sil_scores.append(score)
 
@@ -354,10 +358,8 @@ if df is not None:
 
         st.write(f"**Best k by silhouette score: {best_k}**  _(score = {max(sil_scores):.3f})_")
 
-        # --- User-selectable number of clusters ---
-        k = st.sidebar.slider("Number of Clusters", min_value=2, max_value=10, value=best_k)
-
-        agg = AgglomerativeClustering(n_clusters=k, linkage="ward")
+        # --- Final Clustering with User-Selected k ---
+        agg = AgglomerativeClustering(n_clusters=k, linkage=linkage_option)
         cluster_labels = agg.fit_predict(X_scaled)
 
         clustered_df = df.copy()
@@ -379,7 +381,7 @@ if df is not None:
         scatter = ax2.scatter(X_pca[:, 0], X_pca[:, 1], c=cluster_labels, cmap='viridis', s=60, edgecolor='k', alpha=0.7)
         ax2.set_xlabel("Principal Component 1")
         ax2.set_ylabel("Principal Component 2")
-        ax2.set_title("Agglomerative Clustering (PCA View)")
+        ax2.set_title(f"Agglomerative Clustering (PCA View, k={k}, linkage='{linkage_option}')")
         ax2.legend(*scatter.legend_elements(), title="Clusters")
         ax2.grid(True)
         st.pyplot(fig2)
