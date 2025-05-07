@@ -9,6 +9,8 @@ With this app, users can:
 - Specify and customize target and feature variables, along with model hyperparameters, to fine-tune model analysis and performance
 - Visualize model performance with tools like confusion matrices, decision trees, and ROC curves
 
+Click [HERE](https://dolan-data-science-portfolio-supervisedml-app.streamlit.app/) to access the app online.
+
 # 🚀 Instructions:
 
 ### Prerequisites
