@@ -6,8 +6,9 @@ import graphviz
 from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, silhouette_score
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 from sklearn.datasets import fetch_california_housing, load_breast_cancer, load_diabetes, load_iris
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -181,3 +182,84 @@ if model_option == 'Principal Component Analysis':
     y_pred_pca = clf_pca.predict(X_test_pca)
     acc_pca = accuracy_score(y_test, y_pred_pca)
     st.write("Logistic Regression Accuracy on PCA: {:.2f}%".format(acc_pca * 100))
+
+if model_option == 'K-Means Clustering': 
+
+    scaler = StandardScaler()
+    X_std = scaler.fit_transform(X)
+
+    k = 2
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    clusters = kmeans.fit_predict(X_std)
+
+   # Reduce the data to 2 dimensions for visualization using PCA
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X_std)
+
+    # Create a scatter plot of the PCA-transformed data, colored by KMeans cluster labels
+    fig1, ax1 = plt.subplots(figsize=(8, 6))
+    ax1.scatter(X_pca[clusters == 0, 0], X_pca[clusters == 0, 1],
+                c='navy', alpha=0.7, edgecolor='k', s=60, label='Cluster 0')
+    ax1.scatter(X_pca[clusters == 1, 0], X_pca[clusters == 1, 1],
+                c='darkorange', alpha=0.7, edgecolor='k', s=60, label='Cluster 1')
+    ax1.set_xlabel('Principal Component 1')
+    ax1.set_ylabel('Principal Component 2')
+    ax1.set_title('KMeans Clustering: 2D PCA Projection')
+    ax1.legend(loc='best')
+    ax1.grid(True)
+    st.pyplot(fig1)
+
+    # For comparison, visualize true labels using PCA (same 2D projection)
+    fig2, ax2 = plt.subplots(figsize=(8, 6))
+    colors = ['navy', 'darkorange']
+    for i, target_name in enumerate(target_names):
+        ax2.scatter(X_pca[y == i, 0], X_pca[y == i, 1],
+                    color=colors[i], alpha=0.7, edgecolor='k', s=60, label=target_name)
+    ax2.set_xlabel('Principal Component 1')
+    ax2.set_ylabel('Principal Component 2')
+    ax2.set_title('True Labels: 2D PCA Projection')
+    ax2.legend(loc='best')
+    ax2.grid(True)
+    st.pyplot(fig2)
+
+    from sklearn.metrics import accuracy_score
+
+    # Since KMeans labels are arbitrary (e.g., 0 and 1) and may not match the true labels directly,
+    # we compute accuracy for both the original labels and their complement, and choose the higher value.
+
+    kmeans_accuracy = accuracy_score(y, clusters)
+
+    print("Accuracy Score: {:.2f}%".format(kmeans_accuracy * 100))
+
+    # Define the range of k values to try
+    ks = range(2, 11)
+    wcss = []
+    silhouette_scores = []
+
+    for k in ks:
+        km = KMeans(n_clusters=k, random_state=42)
+        km.fit(X_std)
+        wcss.append(km.inertia_)
+        labels = km.labels_
+        silhouette_scores.append(silhouette_score(X_std, labels))
+
+    st.write("Within-Cluster Sum of Squares (WCSS):", wcss)
+    st.write("Silhouette Scores:", silhouette_scores)
+
+    # Plot the Elbow Method result
+    fig3, (ax3a, ax3b) = plt.subplots(1, 2, figsize=(12, 5))
+
+    ax3a.plot(ks, wcss, marker='o')
+    ax3a.set_xlabel('Number of Clusters (k)')
+    ax3a.set_ylabel('WCSS')
+    ax3a.set_title('Elbow Method for Optimal k')
+    ax3a.grid(True)
+
+    ax3b.plot(ks, silhouette_scores, marker='o', color='green')
+    ax3b.set_xlabel('Number of Clusters (k)')
+    ax3b.set_ylabel('Silhouette Score')
+    ax3b.set_title('Silhouette Score for Optimal k')
+    ax3b.grid(True)
+
+    plt.tight_layout()
+    st.pyplot(fig3)
