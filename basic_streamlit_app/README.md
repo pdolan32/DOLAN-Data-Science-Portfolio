@@ -31,12 +31,13 @@ Ensure you have the following installed:
 Download the `spotify_data.csv` dataset from my data folder and place it in the `data` folder within your project directory.
 
 
-## Running the App
-To launch the application, use the following command in your terminal:
+3. **Running the App**:
+   
+    To launch the application, use the following command in your terminal:
 
-```bash
-streamlit run basic_streamlit_app/spotify_streams_app.py
-```
+    ```bash
+    streamlit run basic_streamlit_app/spotify_streams_app.py
+    ```
 
-The app should open automatically in your default web browser.
+    The app should open automatically in your default web browser.
 
