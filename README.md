@@ -63,3 +63,8 @@ Furthermore, this project complements my work with other tools, such as Streamli
 **Link to the Tidy Data Project Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/basic_streamlit_app) to access the project repository.
 
 The Spotify Streams App is a simple Streamlit application that displays the top ten most-streamed songs on Spotify for February 6th, 2025. The app provides an interactive way to explore streaming data, allowing users to view key details about each song and customize their display preferences.
+
+Although rudimentary, this project was a strong first step towards developing important skills, such as:
+- incorporating interactivity into Streamlit applications through purposeful widgets
+- presenting data in a clean, tabular format
+- constructing and displaying important DataFrames
