@@ -69,15 +69,19 @@ Once these hyperparameters are configured, the model provides a Dendrogram (Hier
 
 ## References
 
-Grokking Machine Learning Chapter 7: Classification Models. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLStreamlitApp/GrokkingML_Measuring%20Classification%20Models-1.pdf) to view this reference.
-
-Grokking Machine Learning Chapter 9: Decision Trees. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLStreamlitApp/GrokkingML_Decision%20Trees.pdf) to view this reference.
+Grokking Machine Learning Chapter 2: Types of Machine Learning. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLUnsupervisedApp/Chapter%202.%20Types%20of%20machine%20learning%20-%20Exploring%20Machine%20Learning%20Basics.pdf) to view this reference.
 
 Streamlit Website: Input Widgets. Click [HERE](https://docs.streamlit.io/develop/api-reference/widgets) to access this reference (external website).
 
 Scikit-Learn: Toy Datasets. Click [HERE](https://scikit-learn.org/stable/datasets/toy_dataset.html) to access this reference (external website).
 
 ## Visualizations
+
+#### Here are some examples of the visualizations and reports produced by the app when the user chooses to analyze a dataset using the 'Hierarchical Clustering' model.
+
+![dendrogram](https://github.com/user-attachments/assets/c976946b-78dd-4e0f-9c87-a9f53f03d7f7)
+![silhouette_curve](https://github.com/user-attachments/assets/344ed012-a9aa-4e68-b3cb-f1f9858a9387)
+![pca_analysis](https://github.com/user-attachments/assets/31bd290b-6536-4a62-b5e3-111e5279bd48)
 
 
 
