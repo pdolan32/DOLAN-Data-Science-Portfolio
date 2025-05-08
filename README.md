@@ -24,7 +24,7 @@ Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/
 Click [HERE](https://dolan-data-science-portfolio-spotify-streams-app.streamlit.app/) to access this app online.
 
 ## Unsupervised Machine Learning Application
- **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLUnsupvervisedApp) to access the project repository.
+ **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLUnsupervisedApp) to access the project repository.
 
 This interactive Streamlit app provides an intuitive platform for exploring datasets and applying key unsupervised machine learning models, including Principal Component Analysis (PCA), K-Means Clustering, and Hierarchical Clustering. This application was designed with accessibility in mind and allows users, regardless of technical background, to upload custom datasets or choose sample data, configure model hyperparameters, and visualize performance through dynamic plots such as scatterplots, dendrograms, scree plots, and silhouette curves.
 
