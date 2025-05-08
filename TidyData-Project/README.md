@@ -52,13 +52,13 @@ Before running the Tidy Data Project program, ensure that you have the dataset i
  
 ## References for Additional Reading
 
-To better understand some of the tidy-data functions applied in this project, consider reading the [Pandas Cheat Sheet](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/TidyData-Project/Pandas_Cheat_Sheet.pdf).
+Pandas Cheat Sheet: Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/TidyData-Project/Pandas_Cheat_Sheet.pdf) to view this reference.
 
-To better understand the principles of tidy datasets, consider reading the [Tidy Data article](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/TidyData-Project/tidy-data.pdf).
+Tiday Data Article: Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/TidyData-Project/tidy-data.pdf) to view this reference
 
 ## Visualizations
 
-#### A tidy dataset enables in-depth analysis, making it possible to uncover insights, such as those in the visuals below!
+A tidy dataset enables in-depth analysis, making it possible to uncover important data insights, such as those visualized the graphs and charts below:
 
 <img width="970" alt="TidyData_BarChart" src="https://github.com/user-attachments/assets/80742f0a-81aa-45c2-bf63-d77e5619e418" />
 <img width="500" alt="Screenshot 2025-03-13 at 7 57 01 PM" src="https://github.com/user-attachments/assets/cdec4969-f288-47b4-8512-c3c548d0aaeb" />
