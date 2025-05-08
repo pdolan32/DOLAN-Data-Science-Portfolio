@@ -9,7 +9,7 @@ Welcome to my Data Science Portfolio! This repository showcases my data science 
 
 **Unsupervised Machine Learning App:** this Streamlit-based app offers an interactive and user-friendly interface for exploring datasets using unsupervised machine learning models like PCA, K-Means, and Hierarchical Clustering. Users can upload data, customize hyperparameters, and generate dynamic visualizations, including scatter plots, scree plots, dendrograms, and silhouette curves, to support intuitive, data-driven insights and experimentation.
 
-Click [HERE]() to access this app online.
+Click [HERE](https://dolan-data-science-portfolio-ml-unsupervised-app.streamlit.app/) to access this app online.
 
 **Supervised Machine Learning App:** this interactive Streamlit app enables users to explore supervised machine learning models, including Linear Regression, Logistic Regression, and Decision Trees, through an intuitive, customizable interface. The app supports dataset uploads, hyperparameter tuning, and real-time performance visualizations such as ROC curves, confusion matrices, and decision trees. Ultimately, the app simplifies model experimentation and highlights my skills in interactive Python development and model deployment.
 
@@ -24,7 +24,7 @@ Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/
 Click [HERE](https://dolan-data-science-portfolio-spotify-streams-app.streamlit.app/) to access this app online.
 
 ## Unsupervised Machine Learning Application
- **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLUnsupvervisedApp) to access the project repository.
+ **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLUnsupervisedApp) to access the project repository.
 
 This interactive Streamlit app provides an intuitive platform for exploring datasets and applying key unsupervised machine learning models, including Principal Component Analysis (PCA), K-Means Clustering, and Hierarchical Clustering. This application was designed with accessibility in mind and allows users, regardless of technical background, to upload custom datasets or choose sample data, configure model hyperparameters, and visualize performance through dynamic plots such as scatterplots, dendrograms, scree plots, and silhouette curves.
 
