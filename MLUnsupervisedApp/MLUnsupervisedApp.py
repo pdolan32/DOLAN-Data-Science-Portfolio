@@ -72,7 +72,7 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
 
         st.write(df_clean.head())
 
-        st.markdown('#### In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
+        st.markdown('##### In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
 
 else: # If the user selected not to upload their own data, this line displays a dropdown in the sidebar to let them pick from three built-in sample datasets.
     dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('Breast Cancer', 'Iris', 'Wine'))
