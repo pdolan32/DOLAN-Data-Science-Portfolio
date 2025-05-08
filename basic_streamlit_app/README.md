@@ -7,6 +7,8 @@ Some notable features of the application include:
 - **Data Display**: a dataframe showcasing the top ten most-streamed songs, including: song title, main artist(s), featured artist(s) (if applicable), daily stream count, and total stream count.
 - **Interactivity**: the user is able to toggle between displaying daily stream count and total stream count using buttons and select a specific song from a drop-down menu to view its details.
 
+Click [HERE](https://dolan-data-science-portfolio-spotify-streams-app.streamlit.app/) to access the app online.
+
 ## Instructions
 
 ### Prerequisites
