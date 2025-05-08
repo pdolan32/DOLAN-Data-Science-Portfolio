@@ -39,33 +39,6 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
         if st.sidebar.checkbox("Does your dataset include a target column?"):
             target_column = st.sidebar.selectbox("Select target column:", df.columns)
 
-        # --- Handle Missing Values ---
-        st.subheader("Missing Value Handling")
-
-        missing_info = df.isnull().sum()
-        if missing_info.any():
-            st.write("Missing values detected:")
-            st.write(missing_info[missing_info > 0])
-
-            missing_option = st.sidebar.radio(
-                "Choose how to handle missing values:",
-                ("Drop rows", "Fill with mean (numeric only)")
-            )
-
-            if missing_option == "Drop rows":
-                df = df.dropna()
-                st.write("Dropped rows with any missing values.")
-            elif missing_option == "Fill with mean (numeric only)":
-                numeric_cols = df.select_dtypes(include=np.number).columns
-                df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
-                st.write("Filled missing numeric values with column means.")
-        else:
-            st.write("No missing values detected.")
-
-        # --- Show Preprocessed Data ---
-        st.subheader("Preprocessed Dataset Preview:")
-        st.write(df.head())
-
 else: # If the user selected not to upload their own data, this line displays a dropdown in the sidebar to let them pick from three built-in sample datasets.
     dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('Breast Cancer', 'Iris', 'Wine'))
 
