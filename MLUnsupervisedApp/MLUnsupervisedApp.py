@@ -139,6 +139,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         # The user can choose how many principal components to extract, from 2 up to a maximum of 15 or however many features the dataset has.
         # Starts with a default of 2 for visualization purposes.
         max_components = min(X.shape[1], 15)
+        st.sidebar.subheader('PCA Options')
         n_components = st.sidebar.slider('Number of Principal Components', 2, max_components, 2)
 
         # Reduces the standardized feature data into 'n_components' principal components. X_pca is now the transformed dataset in the lower-dimensional space.
@@ -296,6 +297,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         X_std = scaler.fit_transform(X)
 
         # Adds a sidebar slider so the user can control how many clusters the K-Means algorithm tries to find.
+        st.sidebar.subheader("Clustering Options")
         k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1)
         # Fits the K-Means model and predicts cluster labels.
         kmeans = KMeans(n_clusters=k, random_state=42)
@@ -365,7 +367,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         st.write('Note: Since KMeans labels are arbitrary (e.g., 0 and 1) and may not match the true labels directly, accuracy for both the original labels and their complement is computed, and the higher value is chosen.')
         kmeans_accuracy = accuracy_score(y, clusters)
 
-        st.write("Accuracy Score: {:.2f}%".format(kmeans_accuracy * 100))
+        st.markdown("##### Accuracy Score: {:.2f}%".format(kmeans_accuracy * 100))
 
         # --- Elbow Method + Silhouette Scores ---
         st.subheader('Evaluating the Best Number of Clusters')
@@ -425,6 +427,7 @@ if df is not None: # Checks whether a DataFrame (df) has been successfully loade
         X_scaled = scaler.fit_transform(X)
 
         # --- Sidebar Controls ---
+        st.sidebar.subheader("Clustering Options")
         linkage_option = st.sidebar.selectbox("Linkage Method", ["ward", "complete", "average", "single"]) # Lets the user choose how distances between clusters are calculated.
         k = st.sidebar.slider('Select number of clusters (k)', min_value=2, max_value=10, value=2, step=1) # Lets the user choose how many clusters they want to form.
 
