@@ -29,15 +29,50 @@ if option == 'Upload Your Own': # If the user chooses to upload their own datase
     uploaded_file = st.sidebar.file_uploader("Upload a CSV file", type='csv') # Creates a file uploader widget in the sidebar, allowing users to upload .csv files.
     if uploaded_file is not None: # This checks if the user has actually uploaded a file. If not, the rest of the code inside this block will not run.
         df = pd.read_csv(uploaded_file) # Reads the uploaded CSV file into a pandas DataFrame called df.
-        st.write("Uploaded Dataset:")
+        st.subheader("Uploaded Dataset:")
         st.write(df.head())
         st.subheader("Summary Statistics:")
         st.write(df.describe()) # Displays summary statistics (mean, std, min, max, etc.) for numeric columns in the uploaded dataset.
-        st.write('In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
+    
 
         # Creates a checkbox in the sidebar. If the user checks it, they are saying their dataset includes a target column (i.e., a column they want to predict or analyze separately).
         if st.sidebar.checkbox("Does your dataset include a target column?"):
             target_column = st.sidebar.selectbox("Select target column:", df.columns)
+        
+        column = st.selectbox("Choose a column to fill", df.select_dtypes(include=['number']).columns)
+        # Provide options for how to handle missing data.
+        method = st.radio("Choose a method", [
+            "Original DF", 
+            "Drop Rows", 
+            "Drop Columns (>50% Missing)", 
+            "Impute Mean", 
+            "Impute Median", 
+            "Impute Zero"
+        ])
+
+        df_clean = df.copy()
+
+        if method == "Original DF":
+            pass  # Keep the data unchanged.
+        elif method == "Drop Rows":
+            # Remove all rows that contain any missing values.
+            df_clean = df_clean.dropna()
+        elif method == "Drop Columns (>50% Missing)":
+            # Drop columns where more than 50% of the values are missing.
+            df_clean = df_clean.drop(columns=df_clean.columns[df_clean.isnull().mean() > 0.5])
+        elif method == "Impute Mean":
+            # Replace missing values in the selected column with the column's mean.
+            df_clean[column] = df_clean[column].fillna(df[column].mean())
+        elif method == "Impute Median":
+            # Replace missing values in the selected column with the column's median.
+            df_clean[column] = df_clean[column].fillna(df[column].median())
+        elif method == "Impute Zero":
+            # Replace missing values in the selected column with zero.
+            df_clean[column] = df_clean[column].fillna(0)
+
+        st.write(df_clean.head())
+
+        st.markdown('#### In order to analyze this dataset, please choose an unsupervised machine learning model from the sidebar.')
 
 else: # If the user selected not to upload their own data, this line displays a dropdown in the sidebar to let them pick from three built-in sample datasets.
     dataset_option = st.sidebar.selectbox('Choose Sample Dataset', ('Breast Cancer', 'Iris', 'Wine'))
