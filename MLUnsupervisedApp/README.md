@@ -79,6 +79,12 @@ Scikit-Learn: Toy Datasets. Click [HERE](https://scikit-learn.org/stable/dataset
 
 ## Visualizations
 
+#### Here are some examples of the visualizations and reports produced by the app when the user chooses to analyze a dataset using the 'Hierarchical Clustering' model.
+
+![dendrogram](https://github.com/user-attachments/assets/c976946b-78dd-4e0f-9c87-a9f53f03d7f7)
+![silhouette_curve](https://github.com/user-attachments/assets/344ed012-a9aa-4e68-b3cb-f1f9858a9387)
+![pca_analysis](https://github.com/user-attachments/assets/31bd290b-6536-4a62-b5e3-111e5279bd48)
+
 
 
 
