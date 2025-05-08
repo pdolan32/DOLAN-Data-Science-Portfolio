@@ -1,4 +1,4 @@
-# 🖥️ Machine Learning App Overview:
+# Supervised Machine Learning App Overview:
 This interactive Streamlit app offers an intuitive platform for exploring datasets and applying supervised machine learning models. The app features dynamic menus and customizable widgets that allow users to tailor their analysis to specific needs and preferences.
 
 The goal of this project is to build an accessible, user-friendly environment that empowers individuals, regardless of technical expertise, to engage with supervised machine learning for both classification and regression tasks: essentially, the app aims to simplify machine learning workflows, support data-driven decision-making, and foster experimentation and learning.
@@ -11,7 +11,7 @@ With this app, users can:
 
 Click [HERE](https://dolan-data-science-portfolio-supervisedml-app.streamlit.app/) to access the app online.
 
-# 🚀 Instructions:
+# Instructions:
 
 ### Prerequisites
 Ensure you have the following installed before running this app:
@@ -36,11 +36,13 @@ streamlit run MLStreamlitApp.py
 
 The app should open automatically in your default web browser.
 
-# ⚙️ App Features:
+# App Features:
 
 This machine learning app includes the following supervised learning machine models: Linear Regression, Logistic Regression, and Decision Trees. Below is a more detailed explanation of how each of these models are implemented within the app.
 
 ## Linear Regression
+
+**Linear Regression** predicts a continuous numeric value by modeling the relationship between input features (X) and a continuous output (y) by fitting a straight line.
 
 Within the Linear Regression model, users can customize key parameters, including:
 - adjusting the test size for the train-test split via a slider
@@ -50,6 +52,8 @@ Once these options are configured, the app provides the scaled model evaluation 
 
 ## Logistic Regression
 
+**Logistic Regression** predicts a categorical outcome using a logistic function to model the probability that a given input belongs to a particular class.
+
 Within the Logistic Regression model, users can customize key parameters, including:
 - adjusting the test size for the train-test split via a slider
 - selecting and modifying the target and feature variables for the regression from a drop-down menu
@@ -57,6 +61,8 @@ Within the Logistic Regression model, users can customize key parameters, includ
 Once these options are configured, the app provides the accuracy score, a classification report, and an AUC score. Furthermore, the app provides visualizations such as a confusion matrix and a ROC Curve.
 
 ## Decision Tree
+
+A **decision tree** model splits the data into subsets based on feature values, using conditions to create a tree structure of decisions and ultimately classify data.
 
 Within the Decision Tree model, users can customize key parameters, including:
 - adjusting the test size for the train-test split via a slider
@@ -69,7 +75,7 @@ Furthermore, within the Decision Tree model, users can set and customize key **h
 
 Once these options are configured, the app provides the accuracy score, a classification report, and an AUC score. Furthermore, the app provides visualizations such as a confusion matrix, a decision tree, and a ROC Curve.
 
-## 📝 References
+## References
 
 Grokking Machine Learning Chapter 7: Classification Models. Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/blob/main/MLStreamlitApp/GrokkingML_Measuring%20Classification%20Models-1.pdf) to view this reference.
 
@@ -79,7 +85,7 @@ Streamlit Website: Input Widgets. Click [HERE](https://docs.streamlit.io/develop
 
 Scikit-Learn: Toy Datasets. Click [HERE](https://scikit-learn.org/stable/datasets/toy_dataset.html) to access this reference (external website).
 
-## 📈 Visualizations
+## Visualizations
 
 #### Here are some examples of the visualizations and reports produced by the app when the user chooses to analyze a dataset using the 'Decision Tree' model.
 
