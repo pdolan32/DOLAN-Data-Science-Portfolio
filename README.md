@@ -9,19 +9,19 @@ Welcome to my Data Science Portfolio! This repository showcases my data science 
 
 **Unsupervised Machine Learning App:** this Streamlit-based app offers an interactive and user-friendly interface for exploring datasets using unsupervised machine learning models like PCA, K-Means, and Hierarchical Clustering. Users can upload data, customize hyperparameters, and generate dynamic visualizations, including scatter plots, scree plots, dendrograms, and silhouette curves, to support intuitive, data-driven insights and experimentation.
 
-Click [HERE]()
+Click [HERE]() to access this app online.
 
 **Supervised Machine Learning App:** this interactive Streamlit app enables users to explore supervised machine learning models, including Linear Regression, Logistic Regression, and Decision Trees, through an intuitive, customizable interface. The app supports dataset uploads, hyperparameter tuning, and real-time performance visualizations such as ROC curves, confusion matrices, and decision trees. Ultimately, the app simplifies model experimentation and highlights my skills in interactive Python development and model deployment.
 
-Click [HERE]()
+Click [HERE](https://dolan-data-science-portfolio-supervisedml-app.streamlit.app/) to access this app online.
 
 **Tidy Data Project:** This project focuses on cleaning and reshaping a messy dataset of medalists from the 2008 Summer Olympics into a tidy format using pandas functions such as .melt() and .str.split(). Once tidied, the dataset is used for basic exploratory data analysis. The project demonstrates core principles of tidy data—each variable as a column, each observation as a row, and each unit of observation as a table, making the dataset easier to analyze and visualize. This project highlights foundational data wrangling skills using Python and Jupyter Notebook.
 
-Click [HERE]()
+Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/TidyData-Project) to access this project's Jupyter Notebook and download information.
 
 **Spotify Streams App:** this Streamlit app offers an interactive look at Spotify's top ten most-streamed songs on February 6th, 2025. Users can view a customizable dataframe with details such as song title, artist(s), and stream counts, and toggle between daily and total streams. A dropdown menu also allows users to explore individual song details. This rudimentary project demonstrates data visualization, UI customization, and Streamlit development using real-world streaming data.
 
-Click [HERE]()
+Click [HERE](https://dolan-data-science-portfolio-spotify-streams-app.streamlit.app/) to access this app online.
 
 ## Unsupervised Machine Learning Application
  **Link to the Machine Learning Application Repository:** Click [HERE](https://github.com/pdolan32/DOLAN-Data-Science-Portfolio/tree/main/MLUnsupvervisedApp) to access the project repository.
