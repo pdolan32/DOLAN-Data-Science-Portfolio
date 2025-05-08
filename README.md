@@ -9,7 +9,7 @@ Welcome to my Data Science Portfolio! This repository showcases my data science 
 
 **Unsupervised Machine Learning App:** this Streamlit-based app offers an interactive and user-friendly interface for exploring datasets using unsupervised machine learning models like PCA, K-Means, and Hierarchical Clustering. Users can upload data, customize hyperparameters, and generate dynamic visualizations, including scatter plots, scree plots, dendrograms, and silhouette curves, to support intuitive, data-driven insights and experimentation.
 
-Click [HERE]() to access this app online.
+Click [HERE](https://dolan-data-science-portfolio-ml-unsupervised-app.streamlit.app/) to access this app online.
 
 **Supervised Machine Learning App:** this interactive Streamlit app enables users to explore supervised machine learning models, including Linear Regression, Logistic Regression, and Decision Trees, through an intuitive, customizable interface. The app supports dataset uploads, hyperparameter tuning, and real-time performance visualizations such as ROC curves, confusion matrices, and decision trees. Ultimately, the app simplifies model experimentation and highlights my skills in interactive Python development and model deployment.
 
