@@ -3,7 +3,7 @@
 Welcome to my Data Science Portfolio! This repository showcases my data science projects, featuring code, analysis, and insights across various domains. Each project is organized into its own folder, containing relevant datasets, code, and other files.
 
 ## Repository Structure
-**Projects:** Each folder represents a unique data science project, including its code, datasets (if applicable), and a README with a project overview.  
+**Projects:** Each folder represents a unique data science project, including its code, datasets (if applicable), and a README.md file with a project overview.  
 
 ## Repository Projects and Applications - At a Glance
 
